@@ -1,0 +1,21 @@
+{
+	"resource string": "TCPIP::192.168.1.11::INSTR",
+	"supply voltage": 50.0,
+	"measure": "V",
+	"resistor": 5.0E-3,
+	"setup": [
+		"SENS:VOLT:DC:RANG 100 mV",
+		"SENS:VOLT:DC:NPLC 0.001",
+		"TRIG:SOUR EXT",
+		"TRIG:DEL 10us",
+		"TRIG:SLOP POS",
+		"SAMP:SOUR IMM",
+		"SAMP:COUN 1",
+		"FORM:DATA ASC",
+		"FORM:BORD NORM"
+	],
+	"set points": "TRIG:COUN %1",
+	"start": "INIT",
+	"sleep": 100.0E-3,
+	"read": "FETC?"
+}

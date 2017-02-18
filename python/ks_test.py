@@ -50,7 +50,7 @@ dmm1.sample_source  = 'IMM'
 dmm1.sample_count   = 1
 dmm1.data_format    = "ASC"
 
-dmm2.range          = '10 V'
+dmm2.range          = v_range
 dmm2.nplc           = nplc
 dmm2.trigger_source = 'EXT'
 dmm2.trigger_slope  = 'POS'
@@ -60,7 +60,8 @@ dmm2.sample_source  = 'IMM'
 dmm2.sample_count   = 1
 dmm2.data_format    = "ASC"
 
-delays  = list(range(0, 17, 2))
+# delays  = list(range(0, 17, 2))
+delays  = [10]
 results = OrderedDict()
 begin   = perf_counter()
 for delay in delays:
@@ -74,21 +75,22 @@ print(perf_counter() - begin)
 
 freq_GHz = 1.0e-9 * ch1.frequencies_Hz
 
-plt.suptitle('DMM DE Test')
+# plt.suptitle('DMM DE Test')
+plt.suptitle('Drain Efficiency')
 
-plt.subplot(2,1,1)
+# plt.subplot(2,1,1)
 plt.title("Drain Efficiency")
 plt.xlabel('Freq (GHz)')
 plt.ylabel('DE (%)')
 for key in results:
 	plt.plot(freq_GHz, results[key][0], label="{0}us".format(key))
 
-plt.subplot(2,1,2)
-plt.title('Voltage')
-plt.xlabel('Freq (GHz)')
-plt.ylabel('Volts')
-for key in results:
-	plt.plot(freq_GHz, results[key][1], label="{0}us".format(key))
-plt.legend(title="Delay")
+# plt.subplot(2,1,2)
+# plt.title('Voltage')
+# plt.xlabel('Freq (GHz)')
+# plt.ylabel('Volts')
+# for key in results:
+# 	plt.plot(freq_GHz, results[key][1], label="{0}us".format(key))
+# plt.legend(title="Delay")
 
 plt.show()
