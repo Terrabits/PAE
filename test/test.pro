@@ -9,11 +9,8 @@ CONFIG    += console \
 
 include(../core/core.pri)
 SOURCES     += main.cpp \
-               keysightdmmtest.cpp \
-    drainefficiencytest.cpp \
     dmmdrivertest.cpp
-HEADERS     += keysightdmmtest.h \
-    drainefficiencytest.h \
+HEADERS     += \
     dmmdrivertest.h
 
 DEFINES     += SOURCE_DIR=\\\"$$PWD/\\\"

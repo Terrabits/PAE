@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QVariantList>
 
 DmmDriver::DmmDriver()
 {
@@ -15,119 +16,97 @@ DmmDriver::DmmDriver()
 
 DmmDriver::DmmDriver(const QString &filename)
 {
-    init();
     open(filename);
 }
 
 bool DmmDriver::save(const QString &filename) {
     QFile file(filename);
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::WriteOnly)) {
         return false;
+    }
 
     QJsonObject json;
-    json.insert("resource string", resourceString);
-    json.insert("supply voltage",  supply_V);
-    if (measurementType == MeasurementType::voltage) {
-        json.insert("measure",     QString("V"));
-    }
-    else {
-        json.insert("measure",     QString("I"));
-    }
-    json.insert("resistor",   resistor_Ohms);
-    json.insert("setup",      QJsonArray::fromStringList(setupScpi));
-    json.insert("set points", pointsScpi);
-    json.insert("start", startScpi);
-    json.insert("sleep", sleep_s);
-    json.insert("read",  readScpi);
+    json["setup scpi"]       = QJsonArray::fromStringList(setupScpi);
+    json["set points scpi"]  = setPointsScpi;
+    json["start scpi"]       = startScpi;
+    json["sleep after start scpi"] = sleepAfterStart_s;
+    json["query data scpi"]  = queryDataScpi;
+    json["measurement type"] = toString(measurementType);
 
-    file.write(QJsonDocument(json).toJson());
+    if (!file.write(QJsonDocument(json).toJson())) {
+        file.close();
+        return false;
+    }
     file.close();
     return true;
 }
+
+QString DmmDriver::toString(const MeasurementType &type) {
+    if (type == MeasurementType::current)
+        return "current";
+    else
+        return "voltage";
+}
+MeasurementType DmmDriver::toMeasurementType(const QString &string) {
+    if (string.toLower() == "current")
+        return MeasurementType::current;
+    else
+        return MeasurementType::voltage;
+}
+
 void DmmDriver::init() {
-    supply_V        = 1;
+    setupScpi.clear();
+    setPointsScpi.clear();
+    startScpi.clear();
+    sleepAfterStart_s = 100E-3;
+    queryDataScpi.clear();
     measurementType = MeasurementType::voltage;
-    resistor_Ohms   = 1;
-    sleep_s         = 100E-3;
 }
 
 bool DmmDriver::open(const QString &filename) {
+    init();
+
     QFile file(filename);
-    if (!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly)) {
         return false;
+    }
     QByteArray text = file.readAll();
     file.close();
 
     QJsonParseError e;
     QJsonDocument document = QJsonDocument::fromJson(text, &e);
     if (e.error != QJsonParseError::ParseError::NoError) {
-//        qDebug() << "JSON ERROR: " << e.errorString();
         return false;
     }
     if (!document.isObject()) {
         return false;
     }
 
-    QJsonObject json = document.object();
-    if (json.contains("resource string")) {
-        resourceString = json["resource string"].toString();
-    }
-    if (json.contains("supply voltage")) {
-        supply_V = json["supply voltage"].toDouble();
-    }
-    if (json.contains("measure")) {
-        QString measure = json["measure"].toString().trimmed().toUpper();
-         if (measure == "V")
-             measurementType = MeasurementType::voltage;
-         else
-             measurementType = MeasurementType::current;
-    }
-    if (json.contains("resistor")) {
-        resistor_Ohms = json["resistor"].toDouble();
-    }
-    if (json.contains("setup")) {
-        setupScpi.clear();
-        QJsonArray array = json["setup"].toArray();
-        for (int i = 0; i < array.size(); i++)
-            setupScpi << array[i].toString();
-    }
-    if (json.contains("set points")) {
-        pointsScpi = json["set points"].toString();
-    }
-    if (json.contains("start")) {
-        startScpi = json["start"].toString();
-    }
-    if (json.contains("sleep")) {
-        sleep_s = json["sleep"].toDouble();
-    }
-    if (json.contains("read")) {
-        readScpi = json["read"].toString();
-    }
-
+    QJsonObject json  = document.object();
+    setupScpi         = json.value("setup scpi").toVariant().toStringList();
+    setPointsScpi     = json["set points scpi"].toString();
+    startScpi         = json["start scpi"].toString();
+    sleepAfterStart_s = json["sleep after start scpi"].toDouble();
+    queryDataScpi     = json["query data scpi"].toString();
+    measurementType   = toMeasurementType(json["measurement type"].toString());
     return true;
 }
 
 bool operator==(const DmmDriver &left, const DmmDriver &right) {
-    if (left.resourceString != right.resourceString)
-        return false;
-    if (left.supply_V != right.supply_V)
-        return false;
-    if (left.measurementType != right.measurementType)
-        return false;
-    if (left.resistor_Ohms != right.resistor_Ohms)
-        return false;
     if (left.setupScpi != right.setupScpi)
         return false;
-    if (left.pointsScpi != right.pointsScpi)
+    if (left.setPointsScpi != right.setPointsScpi)
         return false;
     if (left.startScpi != right.startScpi)
         return false;
-    if (left.sleep_s != right.sleep_s)
+    if (left.sleepAfterStart_s != right.sleepAfterStart_s)
         return false;
-    if (left.readScpi != right.readScpi)
+    if (left.queryDataScpi != right.queryDataScpi)
+        return false;
+    if (left.measurementType != right.measurementType)
         return false;
 
-    // Everything is the same
+    // Same as it ever was
     return true;
 }
 bool operator!=(const DmmDriver &left, const DmmDriver &right) {

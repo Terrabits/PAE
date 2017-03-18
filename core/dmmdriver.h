@@ -10,6 +10,7 @@ enum /*class*/ MeasurementType {
     voltage,
     current
 };
+Q_DECLARE_METATYPE(MeasurementType)
 
 class DmmDriver
 {
@@ -17,18 +18,20 @@ public:
     DmmDriver();
     DmmDriver(const QString &filename);
 
-    QString         resourceString;
-    double          supply_V;
-    MeasurementType measurementType;
-    double          resistor_Ohms;
     QStringList     setupScpi;
-    QString         pointsScpi;
+    QString         setPointsScpi;
     QString         startScpi;
-    double          sleep_s;
-    QString         readScpi;
+    double          sleepAfterStart_s;
+    QString         queryDataScpi;
+    MeasurementType measurementType;
 
     bool save(const QString &filename);
 
+    // Measurement type
+    static QString         toString(const MeasurementType &type);
+    static MeasurementType toMeasurementType(const QString &string);
+
+    bool operator=(const DmmDriver &other);
 private:
     void init();
     bool open(const QString &filename);

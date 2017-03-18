@@ -1,0 +1,15 @@
+R&S PAE Version 0.5
+(C) 2017 Rohde & Schwarz North America
+
+Fri Mar 17 15:28:03 2017
+
+VNA INSTRUMENT INFO
+Instrument not found
+Connection:       No Connection
+Address:          
+
+
+
+
+Instrument not found.
+Please run this application on the instrument.

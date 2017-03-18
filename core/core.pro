@@ -10,13 +10,10 @@ CONFIG(debug, debug|release): TARGET = $$join(TARGET,,,d)
 include($$PWD/../rsatoolbox/rsatoolbox.pri)
 
 HEADERS     += settings.h \
-               keysightdmm.h \
-    drainefficiency.h \
     dmmdriver.h \
     dmm.h
 INCLUDEPATH += $$PWD
-SOURCES     += keysightdmm.cpp \
-    drainefficiency.cpp \
+SOURCES     += \
     dmmdriver.cpp \
     dmm.cpp
 #FORMS       += 

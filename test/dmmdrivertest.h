@@ -15,11 +15,17 @@ public:
     explicit DmmDriverTest(QObject *parent = 0);
 
 private slots:
+    // Once
+    virtual void initTestCase();
+    virtual void cleanupTestCase();
+
     void open();
     void save();
 
 private:
     QDir _src;
+    QDir _fixtures;
+    QDir _temp;
 };
 
 #endif // DMMDRIVERTEST_H

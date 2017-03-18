@@ -11,19 +11,19 @@
 #include <QScopedPointer>
 #include <QString>
 
-class Dmm
+class Dmm : public RsaToolbox::GenericInstrument
 {
 public:
-    Dmm(const QString &resourceString, DmmDriver driver);
+    explicit Dmm(QObject *parent = 0);
+    Dmm(RsaToolbox::GenericBus *bus, QObject *parent = 0);
+    Dmm(RsaToolbox::ConnectionType type, QString address, QObject *parent = 0);
+    Dmm(RsaToolbox::ConnectionType type, QString address, const DmmDriver &driver, QObject *parent = 0);
 
-    bool isConnected();
-    QString idString();
+    DmmDriver driver() const;
+    void setDriver(const DmmDriver &driver);
 
 private:
-    QString   _resource;
     DmmDriver _driver;
-    QScopedPointer<RsaToolbox::GenericInstrument> _dmm;
-
 };
 
 #endif // DMM_H

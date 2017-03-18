@@ -10,9 +10,22 @@ using namespace RsaToolbox;
 
 DmmDriverTest::DmmDriverTest(QObject *parent) :
     TestClass(parent),
-    _src(SOURCE_DIR)
+    _src(SOURCE_DIR),
+    _fixtures(_src.filePath("fixtures")),
+    _temp(_src.filePath("temp"))
 {
+    _src.setPath(SOURCE_DIR);
+    _fixtures.setPath(_src.filePath("fixtures"));
+    _temp.setPath(_src.filePath("temp"));
+}
 
+void DmmDriverTest::initTestCase() {
+    _temp.removeRecursively();
+    QVERIFY(_src.mkpath("temp"));
+}
+
+void DmmDriverTest::cleanupTestCase() {
+    QVERIFY(_temp.removeRecursively());
 }
 
 void DmmDriverTest::open() {
@@ -27,38 +40,43 @@ void DmmDriverTest::open() {
               << "FORM:DATA ASC"
               << "FORM:BORD NORM";
 
-    DmmDriver dmm(_src.filePath("fixtures/driver.json"));
-    QCOMPARE(dmm.resourceString,  QString("TCPIP::192.168.1.11::INSTR"));
-    QCOMPARE(dmm.supply_V,        50.0);
+    DmmDriver dmm(_src.filePath("fixtures/example_driver.json"));
+    QCOMPARE(dmm.setupScpi, setupScpi);
+    QCOMPARE(dmm.setPointsScpi, QString("TRIG:COUN %1"));
+    QCOMPARE(dmm.startScpi, QString("INIT"));
+    QCOMPARE(dmm.sleepAfterStart_s, 100.0e-3);
+    QCOMPARE(dmm.queryDataScpi, QString("FETC?"));
     QCOMPARE(dmm.measurementType, MeasurementType::voltage);
-    QCOMPARE(dmm.resistor_Ohms,   5.0E-3);
-    QCOMPARE(dmm.setupScpi,       setupScpi);
-    QCOMPARE(dmm.pointsScpi,      QString("TRIG:COUN %1"));
-    QCOMPARE(dmm.startScpi,       QString("INIT"));
-    QCOMPARE(dmm.sleep_s,         100E-3);
-    QCOMPARE(dmm.readScpi,        QString("FETC?"));
 }
 void DmmDriverTest::save() {
-    DmmDriver dmm;
-    dmm.resourceString  = "TCPIP::192.168.1.11::INSTR";
-    dmm.supply_V        = 50.0;
-    dmm.measurementType = MeasurementType::voltage;
-    dmm.resistor_Ohms   = 5.0E-3;
-    dmm.setupScpi << "SENS:VOLT:DC:RANG 100 mV"
-                  << "SENS:VOLT:DC:NPLC 0.001"
-                  << "TRIG:SOUR EXT"
-                  << "TRIG:DEL 10us"
-                  << "TRIG:SLOP POS"
-                  << "SAMP:SOUR IMM"
-                  << "SAMP:COUN 1"
-                  << "FORM:DATA ASC"
-                  << "FORM:BORD NORM";
-    dmm.pointsScpi = "TRIG:COUN %1";
-    dmm.startScpi  = "INIT";
-    dmm.sleep_s    = 100.0E-3;
-    dmm.readScpi   = "FETC?";
-    QVERIFY(dmm.save(_src.filePath("output/driver.json")));
+    QString filename = _temp.filePath("dmm_driver_test_save.json");
+    QStringList setupScpi;
+    setupScpi << "SENS:VOLT:DC:RANG 100 mV"
+              << "SENS:VOLT:DC:NPLC 0.001"
+              << "TRIG:SOUR EXT"
+              << "TRIG:DEL 10us"
+              << "TRIG:SLOP POS"
+              << "SAMP:SOUR IMM"
+              << "SAMP:COUN 1"
+              << "FORM:DATA ASC"
+              << "FORM:BORD NORM";
 
-    DmmDriver saved_dmm(_src.filePath("output/driver.json"));
-    QCOMPARE(dmm, saved_dmm);
+    DmmDriver dmm_save;
+    dmm_save.setupScpi         = setupScpi;
+    dmm_save.setPointsScpi     = "TRIG:COUN %1";
+    dmm_save.startScpi         = "INIT";
+    dmm_save.sleepAfterStart_s = 100e-3;
+    dmm_save.queryDataScpi     = "FETC?";
+    dmm_save.measurementType   = MeasurementType::voltage;
+    QVERIFY(dmm_save.save(filename));
+
+    DmmDriver dmm_open(filename);
+    QCOMPARE(dmm_open.setupScpi, dmm_save.setupScpi);
+    QCOMPARE(dmm_open.setPointsScpi, dmm_save.setPointsScpi);
+    QCOMPARE(dmm_open.startScpi, dmm_save.startScpi);
+    QCOMPARE(dmm_open.sleepAfterStart_s, dmm_save.sleepAfterStart_s);
+    QCOMPARE(dmm_open.queryDataScpi, dmm_save.queryDataScpi);
+    QCOMPARE(dmm_open.measurementType, dmm_save.measurementType);
+
+    QCOMPARE(dmm_open, dmm_save);
 }

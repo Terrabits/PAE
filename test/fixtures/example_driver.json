@@ -14,5 +14,5 @@
   "start scpi":             "INIT",
   "sleep after start scpi": 100e-3,
   "query data scpi":        "FETC?",
-  "units":                  "volts"
+  "measurement type":       "voltage"
 }
