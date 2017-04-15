@@ -1,7 +1,12 @@
 #include "dmm.h"
 
 // RsaToolbox
+#include <General.h>
 using namespace RsaToolbox;
+
+// Qt
+#include <QThread>
+
 
 Dmm::Dmm(QObject *parent) :
     GenericInstrument(parent)
@@ -24,4 +29,42 @@ Dmm::Dmm(ConnectionType type, QString address, const DmmDriver &driver, QObject 
     _driver(driver)
 {
 
+}
+
+DmmDriver Dmm::driver() const {
+    return _driver;
+}
+void Dmm::setDriver(const DmmDriver &driver) {
+    _driver = driver;
+}
+void Dmm::setDriver(const QString &filename) {
+    _driver = DmmDriver(filename);
+}
+
+void Dmm::setup(uint points) {
+    _points = points;
+    sendSetupScpi();
+    sendPointsScpi(points);
+}
+void Dmm::start() {
+    sendStartScpi();
+    sleep();
+}
+QRowVector Dmm::readData() {
+    return parseDoubles(query(_driver.queryDataScpi), ",");
+}
+
+void Dmm::sendSetupScpi() {
+    for (int i = 0; i < _driver.setupScpi.size(); i++) {
+        write(_driver.setupScpi[i]);
+    }
+}
+void Dmm::sendPointsScpi(uint points) {
+    write(_driver.setPointsScpi.arg(points));
+}
+void Dmm::sendStartScpi() {
+    write(_driver.startScpi);
+}
+void Dmm::sleep() {
+    QThread::sleep(_driver.sleepAfterStart_s);
 }

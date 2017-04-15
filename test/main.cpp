@@ -5,6 +5,7 @@
 
 // Tests
 #include "dmmdrivertest.h"
+#include "dmmtest.h"
 
 // RsaToolbox
 #include <General.h>
@@ -19,6 +20,7 @@ using namespace RsaToolbox;
 int main() {
     TestRunner testRunner;
     testRunner.addTest(new DmmDriverTest);
+    testRunner.addTest(new DmmTest);
 
     qDebug() << "Global result: " << (testRunner.runTests() ? "PASS" : "FAIL");
     return 0;

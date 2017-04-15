@@ -13,6 +13,14 @@ DmmDriver::DmmDriver()
 {
     init();
 }
+DmmDriver::DmmDriver(const DmmDriver &other) {
+    setupScpi         = other.setupScpi;
+    setPointsScpi     = other.setPointsScpi;
+    startScpi         = other.startScpi;
+    sleepAfterStart_s = other.sleepAfterStart_s;
+    queryDataScpi     = other.queryDataScpi;
+    measurementType   = other.measurementType;
+}
 
 DmmDriver::DmmDriver(const QString &filename)
 {
@@ -52,6 +60,15 @@ MeasurementType DmmDriver::toMeasurementType(const QString &string) {
         return MeasurementType::current;
     else
         return MeasurementType::voltage;
+}
+
+void DmmDriver::operator=(const DmmDriver &other) {
+    setupScpi         = other.setupScpi;
+    setPointsScpi     = other.setPointsScpi;
+    startScpi         = other.startScpi;
+    sleepAfterStart_s = other.sleepAfterStart_s;
+    queryDataScpi     = other.queryDataScpi;
+    measurementType   = other.measurementType;
 }
 
 void DmmDriver::init() {

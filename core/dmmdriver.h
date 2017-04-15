@@ -16,6 +16,7 @@ class DmmDriver
 {
 public:
     DmmDriver();
+    DmmDriver(const DmmDriver &other);
     DmmDriver(const QString &filename);
 
     QStringList     setupScpi;
@@ -31,7 +32,7 @@ public:
     static QString         toString(const MeasurementType &type);
     static MeasurementType toMeasurementType(const QString &string);
 
-    bool operator=(const DmmDriver &other);
+    void operator=(const DmmDriver &other);
 private:
     void init();
     bool open(const QString &filename);

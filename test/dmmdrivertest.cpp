@@ -9,10 +9,7 @@ using namespace RsaToolbox;
 #include <QTest>
 
 DmmDriverTest::DmmDriverTest(QObject *parent) :
-    TestClass(parent),
-    _src(SOURCE_DIR),
-    _fixtures(_src.filePath("fixtures")),
-    _temp(_src.filePath("temp"))
+    TestClass(parent)
 {
     _src.setPath(SOURCE_DIR);
     _fixtures.setPath(_src.filePath("fixtures"));

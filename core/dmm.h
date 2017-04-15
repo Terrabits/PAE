@@ -5,6 +5,7 @@
 #include "dmmdriver.h"
 
 // RsaToolbox
+#include <Definitions.h>
 #include <GenericInstrument.h>
 
 // Qt
@@ -21,9 +22,21 @@ public:
 
     DmmDriver driver() const;
     void setDriver(const DmmDriver &driver);
+    void setDriver(const QString &filename);
+
+
+    void setup(uint points);
+    void start();
+    RsaToolbox::QRowVector readData();
 
 private:
     DmmDriver _driver;
+    uint _points;
+
+    void sendSetupScpi();
+    void sendPointsScpi(uint points);
+    void sendStartScpi();
+    void sleep();
 };
 
 #endif // DMM_H
