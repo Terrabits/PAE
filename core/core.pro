@@ -11,11 +11,15 @@ include($$PWD/../rsatoolbox/rsatoolbox.pri)
 
 HEADERS     += settings.h \
     dmmdriver.h \
-    dmm.h
+    dmm.h \
+    stagesettings.h \
+    stagesettingsmodel.h
 INCLUDEPATH += $$PWD
 SOURCES     += \
     dmmdriver.cpp \
-    dmm.cpp
+    dmm.cpp \
+    stagesettings.cpp \
+    stagesettingsmodel.cpp
 #FORMS       += 
 #RESOURCES   += 
 

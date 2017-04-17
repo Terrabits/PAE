@@ -2,7 +2,7 @@
 
 // Project
 #include "settings.h"
-// #include "mainwindow.h"
+#include "mainwindow.h"
 
 // RsaToolbox
 #include "About.h"
@@ -25,24 +25,25 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    if (isAboutMenu(argc, argv))
-            return 0;
+//    if (isAboutMenu(argc, argv))
+//            return 0;
 
-    Log log(LOG_FILENAME, APP_NAME, APP_VERSION);
-    log.printHeader();
+//    Log log(LOG_FILENAME, APP_NAME, APP_VERSION);
+//    log.printHeader();
 
-    Vna vna(CONNECTION_TYPE, INSTRUMENT_ADDRESS);
-    vna.useLog(&log);
-    vna.printInfo();
+//    Vna vna(CONNECTION_TYPE, INSTRUMENT_ADDRESS);
+//    vna.useLog(&log);
+//    vna.printInfo();
 
-    Keys keys(KEY_PATH);
+//    Keys keys(KEY_PATH);
 
-    if (isNoConnection(vna) || isUnknownModel(vna))
-            return(0);
+//    if (isNoConnection(vna) || isUnknownModel(vna))
+//            return(0);
 
-    // MainWindow w(vna, keys);
-    // w.setWindowFlags(w.windowFlags() | Qt::WindowStaysOnTopHint);
-    // w.show();
+//    MainWindow w(vna, keys);
+    MainWindow w;
+    w.setWindowFlags(w.windowFlags() | Qt::WindowStaysOnTopHint);
+    w.show();
     return app.exec();
 }
 

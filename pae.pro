@@ -2,7 +2,8 @@
 
 TEMPLATE  = subdirs
 CONFIG   += ordered
-SUBDIRS  += core        \
-            test        \
+SUBDIRS  += core    \
+            test    \
+            guitest \
             app
 
