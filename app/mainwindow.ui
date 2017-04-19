@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>385</width>
-    <height>855</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
@@ -22,14 +22,14 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="paeRadio">
          <property name="text">
           <string>Power Added Efficiency (PAE)</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="deRadio">
          <property name="text">
           <string>Drain Efficiency (DE)</string>
          </property>
@@ -52,7 +52,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="inputPowerTrace"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
@@ -62,7 +62,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_2"/>
+        <widget class="QComboBox" name="gainTrace"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_3">
@@ -72,137 +72,13 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QComboBox" name="comboBox_3"/>
+        <widget class="QComboBox" name="outputPowerTrace"/>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="title">
-       <string>DC Power</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Supply Voltage</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Shunt Resistor</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="title">
-       <string>Digital Multimeter (DMM)</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,0">
-       <item row="0" column="0">
-        <widget class="QComboBox" name="comboBox_4">
-         <item>
-          <property name="text">
-           <string>TCPIP</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>GPIB</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_3"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Driver</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_4"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>31</width>
-           <height>28</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>31</width>
-           <height>28</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTableWidget" name="tableWidget">
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
-      </property>
-      <row>
-       <property name="text">
-        <string>driver</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>amp</string>
-       </property>
-      </row>
-      <column>
-       <property name="text">
-        <string>Stage</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>PS (V)</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>R (Ω)</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Connection</string>
-       </property>
-      </column>
-     </widget>
+     <widget class="QWidget" name="dmmList" native="true"/>
     </item>
     <item>
      <spacer name="verticalSpacer">
@@ -218,36 +94,10 @@
      </spacer>
     </item>
     <item>
-     <widget class="QWidget" name="widget" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,0">
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>105</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="text">
-          <string>Cancel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>Measure</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
      </widget>
     </item>
    </layout>

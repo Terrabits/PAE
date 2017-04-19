@@ -11,12 +11,11 @@ using namespace RsaToolbox;
 
 StageSettings::StageSettings()
 {
-//    name.clear();
-    powerSupply_V = 5.0;
-    shuntResistor_ohms = 1.0e-3;
-    connectionType = ConnectionType::VisaTcpConnection;
-//    address.clear();
-//    driverPath.clear();
+    init();
+}
+StageSettings::StageSettings(const QString &name) {
+    init();
+    this->name = name;
 }
 
 StageSettings::~StageSettings()
@@ -35,4 +34,13 @@ QString StageSettings::driverFilename() const {
         return QString();
 
     return QFileInfo(driverPath).fileName();
+}
+
+void StageSettings::init() {
+    name.clear();
+    powerSupply_V = 5.0;
+    shuntResistor_ohms = 1.0E-3;
+    connectionType = ConnectionType::VisaTcpConnection;
+    address.clear();
+    driverPath.clear();
 }

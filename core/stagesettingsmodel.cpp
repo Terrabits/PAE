@@ -1,5 +1,10 @@
 #include "stagesettingsmodel.h"
 
+
+// Qt
+#include <QDebug>
+
+
 StageSettingsModel::StageSettingsModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
@@ -75,15 +80,60 @@ bool StageSettingsModel::setData(const QModelIndex &index, const QVariant &value
         return false;
     }
 }
-QModelIndex StageSettingsModel::index(int row, int column, const QModelIndex &parent) const {
-    if (parent.isValid())
-        return QModelIndex();
+//QModelIndex StageSettingsModel::index(int row, int column, const QModelIndex &parent) const {
+//    if (parent.isValid())
+//        return QModelIndex();
 
-    return createIndex(row, column);
-}
+//    return createIndex(row, column);
+//}
 QModelIndex StageSettingsModel::parent(const QModelIndex &child) const {
     Q_UNUSED(child);
     return QModelIndex();
+}
+
+bool StageSettingsModel::insertRows(int row, int count, const QModelIndex &parent) {
+    if (parent.isValid())
+        return false;
+
+    beginInsertRows(parent, row, row + count - 1);
+    _settings.insert(row, count, StageSettings());
+    endInsertRows();
+    return true;
+}
+bool StageSettingsModel::removeRows(int row, int count, const QModelIndex &parent) {
+    if (parent.isValid())
+        return false;
+
+    beginRemoveRows(parent, row, row + count - 1);
+    _settings.remove(row, count);
+    endRemoveRows();
+    return true;
+}
+bool StageSettingsModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) {
+    qDebug() << "Move " << sourceRow << "-" << count << " => " << destinationChild;
+    if (sourceParent.isValid())
+        return false;
+    if (destinationParent.isValid())
+        return false;
+
+//    beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    beginResetModel();
+    qDebug() << "  Begin moving...";
+    qDebug() << "  _settings.size: " << _settings.size();
+    QVector<StageSettings> source = _settings.mid(sourceRow, count);
+    qDebug() << "  source.size: " << source.size();
+    _settings.remove(sourceRow, count);
+    qDebug() << "  _settings.size: " << _settings.size();
+    while (!source.isEmpty()) {
+        qDebug() << "  Inserting...";
+        _settings.insert(destinationChild, source.takeLast());
+    }
+    qDebug() << "  source.size: " << source.size();
+    qDebug() << "  _settings.size: " << _settings.size();
+//    endMoveRows();
+    endResetModel();
+    qDebug() << "End";
+    return true;
 }
 
 QVector<StageSettings> StageSettingsModel::settings() const {

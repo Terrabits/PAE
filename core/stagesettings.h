@@ -9,6 +9,7 @@ class StageSettings
 {
 public:
     StageSettings();
+    StageSettings(const QString &name);
     ~StageSettings();
 
     QString name;
@@ -20,6 +21,9 @@ public:
 
     QString connectionTypeString () const;
     QString driverFilename() const;
+
+private:
+    void init();
 };
 
 #endif // STAGESETTINGS_H

@@ -7,7 +7,7 @@
 
 QT      += core gui widgets
 
-TARGET = stages
+TARGET = stagelistwidget
 TEMPLATE = app
 
 include(../../core/core.pri)

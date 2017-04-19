@@ -16,11 +16,11 @@ TARGET = PAE
 TEMPLATE = app
 
 include(../core/core.pri)
-#HEADERS     += 
+HEADERS     += mainwindow.h
 INCLUDEPATH += $$PWD
 SOURCES     += main.cpp \
-    mainwindow.cpp
-#FORMS       += mainwindow.ui
+               mainwindow.cpp
+FORMS       += mainwindow.ui
 RESOURCES   += resources.qrc
 OTHER_FILES += vs2010resources.rc \
                DEBUG_LOGFILE.txt
@@ -28,10 +28,3 @@ win32:      RC_FILE = vs2010resources.rc
 
 DEFINES += SOURCE_DIR=\\\"$$PWD\\\"
 CONFIG(debug, debug|release):DEFINES += DEBUG_MODE
-
-FORMS += \
-    mainwindow.ui
-
-HEADERS += \
-    mainwindow.h
-
