@@ -1,6 +1,10 @@
 #include "stagesettingsmodel.h"
 
 
+// RsaToolbox
+#include <General.h>
+using namespace RsaToolbox;
+
 // Qt
 #include <QDebug>
 
@@ -30,7 +34,28 @@ int StageSettingsModel::rowCount(const QModelIndex &parent) const {
 
     return _settings.size();
 }
+QVariant StageSettingsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (orientation == Qt::Vertical || role != Qt::DisplayRole) {
+        return QAbstractTableModel::headerData(section, orientation, role);
+    }
 
+    switch(section) {
+    case Column::name:
+        return "Name";
+    case Column::powerSupply:
+        return "P. Supply";
+    case Column::shuntResistor:
+        return "Shunt R";
+    case Column::connectionType:
+        return "Connect";
+    case Column::address:
+        return "Address";
+    case Column::driver:
+        return "Driver";
+    default:
+        return QVariant();
+    }
+}
 QVariant StageSettingsModel::data(const QModelIndex &index, int role) const {
     if (!isValidIndex(index))
         return QVariant();
@@ -80,12 +105,6 @@ bool StageSettingsModel::setData(const QModelIndex &index, const QVariant &value
         return false;
     }
 }
-//QModelIndex StageSettingsModel::index(int row, int column, const QModelIndex &parent) const {
-//    if (parent.isValid())
-//        return QModelIndex();
-
-//    return createIndex(row, column);
-//}
 QModelIndex StageSettingsModel::parent(const QModelIndex &child) const {
     Q_UNUSED(child);
     return QModelIndex();
@@ -168,9 +187,9 @@ QVariant StageSettingsModel::displayData(const QModelIndex &index) const {
     case Column::name:
         return s.name;
     case Column::powerSupply:
-        return s.powerSupply_V;
+        return formatValue(s.powerSupply_V, 3, "V");
     case Column::shuntResistor:
-        return s.shuntResistor_ohms;
+        return formatValue(s.shuntResistor_ohms, 3, "Ω");
     case Column::connectionType:
         return s.connectionTypeString();
     case Column::address:

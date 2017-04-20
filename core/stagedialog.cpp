@@ -2,6 +2,10 @@
 #include "ui_stagedialog.h"
 
 
+// RsaToolbox
+#include <Definitions.h>
+using namespace RsaToolbox;
+
 // Qt
 #include <QApplication>
 #include <QFileDialog>
@@ -17,10 +21,21 @@ StageDialog::StageDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle("Stage Info");
+    setWindowTitle("Stage settings");
     QRegExp regex("^[a-z_][0-9a-z_]*$", Qt::CaseInsensitive);
     QScopedPointer<QRegExpValidator> validator(new QRegExpValidator(regex));
     ui->name->setValidator(validator.take());
+    ui->name->setFocus();
+    ui->name->selectAll();
+
+    ui->supplyVoltage->setParameterName("Supply voltage");
+    ui->supplyVoltage->setUnitAbbrev("V");
+    ui->supplyVoltage->setMinimum(1, SiPrefix::Femto);
+
+    ui->shuntResistor->setParameterName("Shunt resistance");
+    ui->shuntResistor->setUnitAbbrev("Ω");
+    ui->shuntResistor->interpretMKeyAsMilli();
+    ui->shuntResistor->setMinimum(1, SiPrefix::Femto);
 
     connect(ui->driverButton, SIGNAL(clicked()),
             this, SLOT(getDriver()));
@@ -34,7 +49,7 @@ StageDialog::~StageDialog()
 StageSettings StageDialog::settings() const {
     StageSettings _settings;
     _settings.name = ui->name->text();
-//    _settings.connectionType = connectionType();
+    _settings.connectionType = ui->connectionType->currentType();
     _settings.address = ui->address->text();
     _settings.powerSupply_V = ui->supplyVoltage->value();
     _settings.shuntResistor_ohms = ui->shuntResistor->value();
@@ -44,7 +59,7 @@ StageSettings StageDialog::settings() const {
 
 void StageDialog::setSettings(const StageSettings &settings) {
     ui->name->setText(settings.name);
-    // connection type?
+    ui->connectionType->setCurrentType(settings.connectionType);
     ui->address->setText(settings.address);
     ui->supplyVoltage->setValue(settings.powerSupply_V);
     ui->shuntResistor->setValue(settings.shuntResistor_ohms);

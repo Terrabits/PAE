@@ -6,6 +6,7 @@
 #include "stagedialog.h"
 
 // Qt
+#include <QApplication>
 #include <QVector>
 
 
@@ -39,7 +40,7 @@ void StageListWidget::tableDoubleClicked(const QModelIndex &index) {
 
     const int row = index.row();
     QVector<StageSettings> settings = _model->settings();
-    StageDialog dialog(this);
+    StageDialog dialog(QApplication::activeWindow());
     dialog.setSettings(settings[row]);
     dialog.exec();
 

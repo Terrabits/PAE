@@ -49,18 +49,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QComboBox" name="comboBox_4">
-        <item>
-         <property name="text">
-          <string>TCPIP</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>GPIB</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="RsaToolbox::ConnectionTypeComboBox" name="connectionType"/>
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="address"/>
@@ -88,7 +77,14 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="filename"/>
+          <widget class="QLineEdit" name="filename">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="driverButton">
@@ -181,7 +177,20 @@
    <extends>QLineEdit</extends>
    <header>DoubleEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>RsaToolbox::ConnectionTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ConnectionTypeComboBox.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>name</tabstop>
+  <tabstop>connectionType</tabstop>
+  <tabstop>address</tabstop>
+  <tabstop>driverButton</tabstop>
+  <tabstop>supplyVoltage</tabstop>
+  <tabstop>shuntResistor</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
