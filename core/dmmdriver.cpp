@@ -27,6 +27,13 @@ DmmDriver::DmmDriver(const QString &filename)
     open(filename);
 }
 
+bool DmmDriver::isOpen() const {
+    return _isOpen;
+}
+QString DmmDriver::filename() const {
+    return _filename;
+}
+
 bool DmmDriver::save(const QString &filename) {
     QFile file(filename);
     if (!file.open(QFile::WriteOnly)) {
@@ -72,6 +79,9 @@ void DmmDriver::operator=(const DmmDriver &other) {
 }
 
 void DmmDriver::init() {
+    _isOpen = false;
+    _filename.clear();
+
     setupScpi.clear();
     setPointsScpi.clear();
     startScpi.clear();
@@ -83,8 +93,10 @@ void DmmDriver::init() {
 bool DmmDriver::open(const QString &filename) {
     init();
 
+    _filename = filename;
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
+        _isOpen = false;
         return false;
     }
     QByteArray text = file.readAll();
@@ -93,9 +105,11 @@ bool DmmDriver::open(const QString &filename) {
     QJsonParseError e;
     QJsonDocument document = QJsonDocument::fromJson(text, &e);
     if (e.error != QJsonParseError::ParseError::NoError) {
+        _isOpen = false;
         return false;
     }
     if (!document.isObject()) {
+        _isOpen = false;
         return false;
     }
 

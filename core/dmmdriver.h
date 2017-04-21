@@ -19,6 +19,9 @@ public:
     DmmDriver(const DmmDriver &other);
     DmmDriver(const QString &filename);
 
+    bool isOpen() const;
+    QString filename() const;
+
     QStringList     setupScpi;
     QString         setPointsScpi;
     QString         startScpi;
@@ -34,6 +37,8 @@ public:
 
     void operator=(const DmmDriver &other);
 private:
+    bool _isOpen;
+    QString _filename;
     void init();
     bool open(const QString &filename);
 };

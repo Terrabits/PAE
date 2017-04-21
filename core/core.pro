@@ -15,13 +15,15 @@ HEADERS     += settings.h \
                stagesettings.h \
                stagesettingsmodel.h \
                stagelistwidget.h \
-               stagedialog.h
+               stagedialog.h \
+    dmmcontroller.h
 SOURCES     += dmmdriver.cpp \
                dmm.cpp \
                stagesettings.cpp \
                stagesettingsmodel.cpp \
                stagelistwidget.cpp \
-               stagedialog.cpp
+               stagedialog.cpp \
+    dmmcontroller.cpp
 FORMS +=       stagelistwidget.ui \
                stagedialog.ui
 

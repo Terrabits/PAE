@@ -20,6 +20,7 @@ public:
     Dmm(RsaToolbox::ConnectionType type, QString address, QObject *parent = 0);
     Dmm(RsaToolbox::ConnectionType type, QString address, const DmmDriver &driver, QObject *parent = 0);
 
+    bool hasValidDriver() const;
     DmmDriver driver() const;
     void setDriver(const DmmDriver &driver);
     void setDriver(const QString &filename);

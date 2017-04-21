@@ -5,6 +5,7 @@
 using namespace RsaToolbox;
 
 // Qt
+#include <QFileInfo>
 #include <QThread>
 
 
@@ -31,6 +32,9 @@ Dmm::Dmm(ConnectionType type, QString address, const DmmDriver &driver, QObject 
 
 }
 
+bool Dmm::hasValidDriver() const {
+    return _driver.isOpen();
+}
 DmmDriver Dmm::driver() const {
     return _driver;
 }
