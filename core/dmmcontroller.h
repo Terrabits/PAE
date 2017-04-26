@@ -4,6 +4,7 @@
 
 // Project
 #include "dmm.h"
+#include "stageresult.h"
 #include "stagesettings.h"
 
 // RsaToolbox
@@ -23,27 +24,33 @@ public:
     explicit DmmController(QObject *parent = 0);
     ~DmmController();
 
+    void setSweepPoints(uint points);
+    void setPorts(const QVector<uint> &measuredPorts, uint inputPort);
     void setStages(const QVector<StageSettings> &stages);
 
     bool isConnected() const;
-    RsaToolbox::QMatrix2D readData();
+    QVector<StageResult> readResults();
 
 signals:
     void error(const QString &message);
 
 public slots:
     bool connect();
-    bool setup(uint points);
+    bool setup();
     void start();
 
 private:
     bool _isConnected;
-    uint _points;
-    QVector<StageSettings> _stages;
+    uint _sweepPoints;
+    QVector<uint> _measuredPorts;
+    uint          _inputPort;
+    QVector<StageSettings>       _stages;
     QVector<QScopedPointer<Dmm>> _dmms;
 
     bool _setup(uint i);
     void clear();
+    StageResult readStage(uint i);
+    RsaToolbox::QRowVector parse(const RsaToolbox::QRowVector &rawData);
 };
 
 #endif // DMMCONTROLLER_H

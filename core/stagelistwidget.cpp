@@ -17,9 +17,6 @@ StageListWidget::StageListWidget(QWidget *parent) :
     ui->setupUi(this);
 
     _model.reset(new StageSettingsModel);
-
-    QVector<StageSettings> settings(4);
-    _model->setSettings(settings);
     ui->stages->setModel(_model.data());
 
     connect(ui->stages, SIGNAL(doubleClicked(QModelIndex)),
