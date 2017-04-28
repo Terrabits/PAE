@@ -25,25 +25,28 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-//    if (isAboutMenu(argc, argv))
-//            return 0;
+    if (isAboutMenu(argc, argv))
+            return 0;
 
-//    Log log(LOG_FILENAME, APP_NAME, APP_VERSION);
-//    log.printHeader();
+    Log log(LOG_FILENAME, APP_NAME, APP_VERSION);
+    log.printHeader();
 
-//    Vna vna(CONNECTION_TYPE, INSTRUMENT_ADDRESS);
-//    vna.useLog(&log);
-//    vna.printInfo();
+    Vna vna(CONNECTION_TYPE, INSTRUMENT_ADDRESS);
+    vna.useLog(&log);
+    vna.printInfo();
 
-//    Keys keys(KEY_PATH);
+    Keys keys(KEY_PATH);
 
-//    if (isNoConnection(vna) || isUnknownModel(vna))
-//            return(0);
+    if (isNoConnection(vna) || isUnknownModel(vna))
+            return(0);
 
-//    MainWindow w(vna, keys);
-    MainWindow w;
+    MainWindow w(&vna, &keys);
     w.setWindowFlags(w.windowFlags() | Qt::WindowStaysOnTopHint);
     w.show();
+    int result = app.exec();
+
+    vna.local();
+    return result;
     return app.exec();
 }
 

@@ -21,6 +21,8 @@ StageDialog::StageDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    bool isBlocked = blockSignals(true);
+
     setWindowTitle("Stage settings");
     QRegExp regex("^[a-z_][0-9a-z_]*$", Qt::CaseInsensitive);
     QScopedPointer<QRegExpValidator> validator(new QRegExpValidator(regex));
@@ -39,6 +41,8 @@ StageDialog::StageDialog(QWidget *parent) :
 
     connect(ui->driverButton, SIGNAL(clicked()),
             this, SLOT(getDriver()));
+
+    blockSignals(isBlocked);
 }
 
 StageDialog::~StageDialog()

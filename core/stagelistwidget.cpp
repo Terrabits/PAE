@@ -16,6 +16,8 @@ StageListWidget::StageListWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    bool isBlocked = blockSignals(true);
+
     _model.reset(new StageSettingsModel);
     ui->stages->setModel(_model.data());
 
@@ -24,6 +26,8 @@ StageListWidget::StageListWidget(QWidget *parent) :
 
     ui->panel->setModel(_model.data());
     ui->panel->setSelectionModel(ui->stages->selectionModel());
+
+    blockSignals(isBlocked);
 }
 
 StageListWidget::~StageListWidget()

@@ -12,7 +12,7 @@
 
 // Qt
 #include <QObject>
-#include <QScopedPointer>
+#include <QSharedPointer>
 #include <QString>
 #include <QVector>
 
@@ -45,7 +45,7 @@ private:
     QVector<uint> _measuredPorts;
     uint          _inputPort;
     QVector<StageSettings>       _stages;
-    QVector<QScopedPointer<Dmm>> _dmms;
+    QVector<QSharedPointer<Dmm>> _dmms;
 
     bool _setup(uint i);
     void clear();

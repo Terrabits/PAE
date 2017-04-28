@@ -18,7 +18,8 @@ HEADERS     += settings.h \
                stagedialog.h \
     dmmcontroller.h \
     stageresult.h \
-    measurepae.h
+    measurepae.h \
+    traceswidget.h
 SOURCES     += dmmdriver.cpp \
                dmm.cpp \
                stagesettings.cpp \
@@ -27,9 +28,11 @@ SOURCES     += dmmdriver.cpp \
                stagedialog.cpp \
     dmmcontroller.cpp \
     stageresult.cpp \
-    measurepae.cpp
+    measurepae.cpp \
+    traceswidget.cpp
 FORMS +=       stagelistwidget.ui \
-               stagedialog.ui
+               stagedialog.ui \
+    traceswidget.ui
 
 DEFINES     += SOURCE_DIR=\\\"$$PWD/\\\"
 CONFIG(debug, debug|release):DEFINES += DEBUG_MODE

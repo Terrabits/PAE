@@ -59,8 +59,8 @@ bool DmmController::setup() {
     }
     for (int i = 0; i < _dmms.size(); i++) {
         Dmm &dmm = *_dmms[i];
-        if (!dmm->hasValidDriver()) {
-            const QString filename = dmm->driver().filename();
+        if (!dmm.hasValidDriver()) {
+            const QString filename = dmm.driver().filename();
             QString msg = "Cannot parse \"%1\"";
             msg = msg.arg(filename);
             emit error(msg);
@@ -68,6 +68,8 @@ bool DmmController::setup() {
         }
         dmm.setup(_sweepPoints);
     }
+
+    return true;
 }
 
 void DmmController::start() {

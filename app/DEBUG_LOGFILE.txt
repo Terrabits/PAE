@@ -1,15 +1,58 @@
 R&S PAE Version 0.5
 (C) 2017 Rohde & Schwarz North America
 
-Sun Apr 16 17:45:28 2017
+Thu Apr 27 19:41:35 2017
 
 VNA INSTRUMENT INFO
-Instrument not found
-Connection:       No Connection
-Address:          
+Connection:       TCPIP
+Address:          127.0.0.1::5025
+Make:             Rohde & Schwarz
+Model:            ZVA
+Serial No:        1145101099999999
+Firmware Version: 3.60
+Min Frequency:    300 KHz
+Max Frequency:    8 GHz
+Number of Ports:  4
+Options:          ZVA-K7
+                  ZVA-K17
+                  ZVAB-SIM
+                  ZVT8-B63
+                  ZVT8-B64
+                  ZVT8-B65
+                  ZVT8-B66
+                  ZVT8-B68
+                  ZVA8-B16
+                  ZVA8-B21
+                  ZVA8-B22
+                  ZVA8-B23
+                  ZVA8-B24
+                  ZVA8-B31
+                  ZVA8-B32
+                  ZVA8-B33
+                  ZVA8-B34
+                  ZVT8-B67
+                  ZVA-B7
 
 
+Write:    "*IDN?"
+Bytes: 6
+Status: 0x0 Operation completed successfully.
 
+Read:     "Rohde&Schwarz,ZVA8-4Port,1145101099999999,3.60"
+Bytes: 47
+Status: 0x0 Operation completed successfully.
 
-Instrument not found.
-Please run this application on the instrument.
+Write:    "*IDN?"
+Bytes: 6
+Status: 0x0 Operation completed successfully.
+
+Read:     "Rohde&Schwarz,ZVA8-4Port,1145101099999999,3.60"
+Bytes: 47
+Status: 0x0 Operation completed successfully.
+
+Write:    "@LOC"
+Bytes: 5
+Status: 0x0 Operation completed successfully.
+
+Instrument in local mode
+
