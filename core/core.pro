@@ -16,27 +16,30 @@ HEADERS     += settings.h \
                stagesettingsmodel.h \
                stagelistwidget.h \
                stagedialog.h \
-    dmmcontroller.h \
-    stageresult.h \
-    measurepae.h \
-    traceswidget.h
+               dmmcontroller.h \
+               stageresult.h \
+               measurepae.h \
+               traceswidget.h
 SOURCES     += dmmdriver.cpp \
                dmm.cpp \
                stagesettings.cpp \
                stagesettingsmodel.cpp \
                stagelistwidget.cpp \
                stagedialog.cpp \
-    dmmcontroller.cpp \
-    stageresult.cpp \
-    measurepae.cpp \
-    traceswidget.cpp
+               dmmcontroller.cpp \
+               stageresult.cpp \
+               measurepae.cpp \
+               traceswidget.cpp
 FORMS +=       stagelistwidget.ui \
                stagedialog.ui \
-    traceswidget.ui
+               traceswidget.ui
+RESOURCES +=   core.qrc
 
 DEFINES     += SOURCE_DIR=\\\"$$PWD/\\\"
 CONFIG(debug, debug|release):DEFINES += DEBUG_MODE
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+
+
 
 
 

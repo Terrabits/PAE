@@ -24,6 +24,13 @@ public:
     explicit StageDialog(QWidget *parent = 0);
     ~StageDialog();
 
+    void highlightName();
+    void highlightConnectionType();
+    void highlightAddress();
+    void highlightDriver();
+    void highlightVoltage();
+    void highlightResistance();
+
     StageSettings settings() const;
     void setSettings(const StageSettings &settings);
 

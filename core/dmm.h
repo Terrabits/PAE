@@ -25,9 +25,9 @@ public:
     void setDriver(const DmmDriver &driver);
     void setDriver(const QString &filename);
 
-
     void setup(uint points);
     void start();
+    void sleep();
     RsaToolbox::QRowVector readData();
 
 private:
@@ -37,7 +37,6 @@ private:
     void sendSetupScpi();
     void sendPointsScpi(uint points);
     void sendStartScpi();
-    void sleep();
 };
 
 #endif // DMM_H

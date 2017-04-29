@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
@@ -25,6 +25,9 @@
         <widget class="QRadioButton" name="paeRadio">
          <property name="text">
           <string>Power Added Efficiency (PAE)</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -43,52 +46,18 @@
       <property name="title">
        <string>Input/Output</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,1">
-       <item row="1" column="1">
-        <widget class="QComboBox" name="inputPowerTrace"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="gainTrace"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Gain</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Input Power</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="outputPowerTrace"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Output Power</string>
-         </property>
-        </widget>
-       </item>
+      <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Channel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="channel"/>
+        <widget class="TracesWidget" name="traces" native="true"/>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="StageListWidget" name="dmmList" native="true"/>
+     <widget class="StageListWidget" name="stageList" native="true"/>
+    </item>
+    <item>
+     <widget class="RsaToolbox::ErrorLabel" name="error" native="true"/>
     </item>
     <item>
      <spacer name="verticalSpacer">
@@ -118,6 +87,18 @@
    <class>StageListWidget</class>
    <extends>QWidget</extends>
    <header>stagelistwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TracesWidget</class>
+   <extends>QWidget</extends>
+   <header>traceswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RsaToolbox::ErrorLabel</class>
+   <extends>QWidget</extends>
+   <header>ErrorLabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

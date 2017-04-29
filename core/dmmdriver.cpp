@@ -120,6 +120,7 @@ bool DmmDriver::open(const QString &filename) {
     sleepAfterStart_s = json["sleep after start scpi"].toDouble();
     queryDataScpi     = json["query data scpi"].toString();
     measurementType   = toMeasurementType(json["measurement type"].toString());
+    _isOpen = true;
     return true;
 }
 

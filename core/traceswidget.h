@@ -7,6 +7,7 @@
 #include <Vna.h>
 
 // Qt
+#include <QComboBox>
 #include <QVector>
 #include <QWidget>
 
@@ -23,19 +24,51 @@ public:
     explicit TracesWidget(QWidget *parent = 0);
     ~TracesWidget();
 
-    void setVna (RsaToolbox::Vna  *vna );
-    void setKeys(RsaToolbox::Keys *keys);
+    enum /*class*/ Calculation {
+        powerAddedEfficiency = 0,
+        drainEfficiency      = 1
+    };
+
+    void loadKeys();
+    void saveKeys() const;
+
+    void setAccess(RsaToolbox::Vna *vna, RsaToolbox::Keys *keys);
+
+    bool hasAcceptableInput(Calculation calculation, QString &message);
+
+    bool isInputTrace  () const;
+    bool isGainTrace   () const;
+    bool isOutputTrace () const;
+    QString inputTrace () const;
+    QString gainTrace  () const;
+    QString outputTrace() const;
+
+signals:
+    void error(const QString &message);
 
 private slots:
-    void on_channel_currentIndexChanged(int index);
+    void on_clearInputPower_clicked();
+    void on_clearGain_clicked();
+    void on_clearOutputPower_clicked();
 
 private:
     Ui::TracesWidget *ui;
 
-    RsaToolbox::Vna *_vna;
-    RsaToolbox::Keys *_keys;
+    bool isVna () const;
+    mutable RsaToolbox::Vna *_vna;
 
-    QVector<uint> _channels;
+    bool isKeys() const;
+    mutable RsaToolbox::Keys *_keys;
+
+    void clearInputTrace ();
+    void clearGainTrace  ();
+    void clearOutputTrace();
+    void clearTraces     ();
+    void updateTraces    ();
+    void setInputTrace (const QString &name);
+    void setGainTrace  (const QString &name);
+    void setOutputTrace(const QString &name);
+    void setCombo(QComboBox *combo, const QString &name);
 };
 
 #endif // TRACESWIDGET_H

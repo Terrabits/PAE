@@ -50,14 +50,37 @@ StageDialog::~StageDialog()
     delete ui;
 }
 
+void StageDialog::highlightName() {
+    ui->name->selectAll();
+    ui->name->setFocus();
+}
+void StageDialog::highlightConnectionType() {
+    ui->connectionType->setFocus();
+}
+void StageDialog::highlightAddress() {
+    ui->address->selectAll();
+    ui->address->setFocus();
+}
+void StageDialog::highlightDriver() {
+    ui->driverButton->setFocus();
+}
+void StageDialog::highlightVoltage() {
+    ui->supplyVoltage->selectAll();
+    ui->supplyVoltage->setFocus();
+}
+void StageDialog::highlightResistance() {
+    ui->shuntResistor->selectAll();
+    ui->shuntResistor->setFocus();
+}
+
 StageSettings StageDialog::settings() const {
     StageSettings _settings;
-    _settings.name = ui->name->text();
+    _settings.name           = ui->name->text();
     _settings.connectionType = ui->connectionType->currentType();
-    _settings.address = ui->address->text();
-    _settings.powerSupply_V = ui->supplyVoltage->value();
+    _settings.address        = ui->address->text();
+    _settings.powerSupply_V  = ui->supplyVoltage->value();
     _settings.shuntResistor_ohms = ui->shuntResistor->value();
-    _settings.driverPath = _driver;
+    _settings.driverPath     = _driver;
     return _settings;
 }
 

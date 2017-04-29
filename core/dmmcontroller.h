@@ -11,46 +11,45 @@
 #include <Definitions.h>
 
 // Qt
-#include <QObject>
 #include <QSharedPointer>
 #include <QString>
 #include <QVector>
 
 
-class DmmController : public QObject
+class DmmController
 {
-    Q_OBJECT
 public:
-    explicit DmmController(QObject *parent = 0);
+    DmmController();
     ~DmmController();
+
+    bool isConnected(QString &message) const;
+
+    bool hasAcceptableInput();
+    bool hasAcceptableInput(QString &message);
+
+    bool hasAcceptableStageInput();
+    bool hasAcceptableStageInput(QString &message);
+    void setStages(const QVector<StageSettings> &stages);
 
     void setSweepPoints(uint points);
     void setPorts(const QVector<uint> &measuredPorts, uint inputPort);
-    void setStages(const QVector<StageSettings> &stages);
 
-    bool isConnected() const;
-    QVector<StageResult> readResults();
-
-signals:
-    void error(const QString &message);
-
-public slots:
-    bool connect();
-    bool setup();
+    void setup();
     void start();
+    QVector<StageResult> readResults() const;
 
 private:
-    bool _isConnected;
     uint _sweepPoints;
     QVector<uint> _measuredPorts;
     uint          _inputPort;
-    QVector<StageSettings>       _stages;
+    QVector<StageSettings> _stages;
+
+    void createDmms();
     QVector<QSharedPointer<Dmm>> _dmms;
 
-    bool _setup(uint i);
     void clear();
-    StageResult readStage(uint i);
-    RsaToolbox::QRowVector parse(const RsaToolbox::QRowVector &rawData);
+    StageResult readStage(uint i) const;
+    RsaToolbox::QRowVector parse(const RsaToolbox::QRowVector &rawData) const;
 };
 
 #endif // DMMCONTROLLER_H

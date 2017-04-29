@@ -1,3 +1,5 @@
+app/keys/
+app/DEBUG_LOGFILE.txt
 _build/
 build/
 test/output/

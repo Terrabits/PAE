@@ -52,7 +52,7 @@ void Dmm::setup(uint points) {
 }
 void Dmm::start() {
     sendStartScpi();
-    sleep();
+//    sleep();
 }
 QRowVector Dmm::readData() {
     return parseDoubles(query(_driver.queryDataScpi), ",");
