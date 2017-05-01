@@ -9,11 +9,14 @@ CONFIG    += console \
 
 include(../core/core.pri)
 SOURCES     += main.cpp \
-    dmmdrivertest.cpp \
-    dmmtest.cpp
-HEADERS     += \
-    dmmdrivertest.h \
-    dmmtest.h
+               dmmdrivertest.cpp \
+               dmmtest.cpp \
+               dmmcontrollertest.cpp \
+    measurepaetest.cpp
+HEADERS     += dmmdrivertest.h \
+               dmmtest.h \
+               dmmcontrollertest.h \
+    measurepaetest.h
 
 DEFINES     += SOURCE_DIR=\\\"$$PWD/\\\"
 CONFIG(debug, debug|release):DEFINES += DEBUG_MODE

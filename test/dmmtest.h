@@ -23,6 +23,7 @@ private slots:
 
 private:
     QDir _src;
+    QDir _logDir;
     QDir _fixtures;
 };
 

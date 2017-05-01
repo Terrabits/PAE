@@ -28,7 +28,7 @@ public:
     void setup(uint points);
     void start();
     void sleep();
-    RsaToolbox::QRowVector readData();
+    RsaToolbox::QRowVector readData(uint points);
 
 private:
     DmmDriver _driver;

@@ -4,10 +4,16 @@
 // RsaToolbox
 using namespace RsaToolbox;
 
+// Qt
+#include <QDebug>
+
 
 DmmController::DmmController()
 {
     clear();
+}
+DmmController::DmmController(const DmmController &other) {
+    copy(other);
 }
 
 DmmController::~DmmController()
@@ -32,7 +38,7 @@ void DmmController::setStages(const QVector<StageSettings> &stages) {
 void DmmController::setup() {
     for (int i = 0; i < _stages.size(); i++) {
         Dmm &dmm = *_dmms[i];
-        dmm.setup(_sweepPoints);
+        dmm.setup(_sweepPoints * _measuredPorts.size());
     }
 }
 
@@ -55,6 +61,11 @@ QVector<StageResult> DmmController::readResults() const {
         results[i] = readStage(i);
     }
     return results;
+}
+
+DmmController &DmmController::operator=(const DmmController &other) {
+    copy(other);
+    return *this;
 }
 
 bool DmmController::isConnected(QString &message) const {
@@ -132,15 +143,23 @@ void DmmController::clear() {
 }
 
 StageResult DmmController::readStage(uint i) const {
+    const uint dmmPoints = _sweepPoints * _measuredPorts.size();
     Dmm &dmm = *_dmms[i];
-    return StageResult(parse(dmm.readData()), _stages[i]);
+    return StageResult(parse(dmm.readData(dmmPoints)), _stages[i]);
 }
 QRowVector DmmController::parse(const QRowVector &rawData) const {
     const uint numPorts   = _measuredPorts.size();
     const uint inputIndex = _measuredPorts.indexOf(_inputPort);
-    QRowVector result(_sweepPoints / numPorts);
+    QRowVector result(_sweepPoints);
     for (int i = 0; i < result.size(); i++) {
-        result[i] = rawData[inputIndex + i * numPorts];
+        result[i] = rawData[i * numPorts + inputIndex];
     }
     return result;
+}
+
+void DmmController::copy(const DmmController &other) {
+    _sweepPoints   = other._sweepPoints;
+    _measuredPorts = other._measuredPorts;
+    _inputPort     = other._inputPort;
+    _dmms          = other._dmms;
 }

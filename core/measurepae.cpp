@@ -172,12 +172,18 @@ void MeasurePAE::setStages(const QVector<StageSettings> &stages) {
 }
 
 QVector<StageResult> MeasurePAE::stageResults() const {
-    return _controller.readResults();
+    if (!_results.isEmpty()) {
+        return _results;
+    }
+    else {
+        _results = _controller.readResults();
+        return _results;
+    }
 }
 QRowVector MeasurePAE::dcPower_W() const {
     const QVector<StageResult> results = stageResults();
-    QRowVector power(results.size());
-    for (int i = 0; i < results.size(); i++) {
+    QRowVector power = results[0].power_W();
+    for (int i = 1; i < results.size(); i++) {
         power = add(power, results[i].power_W());
     }
     return power;
@@ -185,16 +191,23 @@ QRowVector MeasurePAE::dcPower_W() const {
 QRowVector MeasurePAE::efficiency_pct() const {
     QRowVector numerator;
     if (isPowerAddedEfficiency()) {
-        numerator = subtract(readPout_W(), readPin_W());
+        numerator = subtract(pout_W(), pin_W());
     }
     else {
-        numerator = readPout_W();
+        numerator = pout_W();
     }
+    qDebug() << "pout.size: " << pout_W().size();
+    qDebug() << "pin.size: " << pin_W().size();
+    qDebug() << "numerator.size: " << numerator.size();
+    qDebug() << "dcpower.size: " << dcPower_W().size();
     QRowVector efficiency = divideEach(numerator, dcPower_W());
+    qDebug() << "efficiency.size: " << efficiency.size();
     return multiply(efficiency, 100.0);
 }
 
 void MeasurePAE::run() {
+    _results.clear();
+
     QString msg;
     if (!hasAcceptableInput(msg)) {
         emit error(msg);

@@ -54,8 +54,9 @@ void Dmm::start() {
     sendStartScpi();
 //    sleep();
 }
-QRowVector Dmm::readData() {
-    return parseDoubles(query(_driver.queryDataScpi), ",");
+QRowVector Dmm::readData(uint points) {
+    const uint bufferSize_B = points * 25 + 1000;
+    return parseDoubles(query(_driver.queryDataScpi, bufferSize_B), ",");
 }
 
 void Dmm::sendSetupScpi() {

@@ -6,6 +6,7 @@
 #include "dmm.h"
 #include "stageresult.h"
 #include "stagesettings.h"
+class DmmControllerTest;
 
 // RsaToolbox
 #include <Definitions.h>
@@ -15,11 +16,17 @@
 #include <QString>
 #include <QVector>
 
+class DmmControllerTest;
+class MeasurePaeTest;
 
 class DmmController
 {
+    friend class DmmControllerTest;
+    friend class MeasurePaeTest;
+
 public:
     DmmController();
+    DmmController(const DmmController &other);
     ~DmmController();
 
     bool isConnected(QString &message) const;
@@ -38,6 +45,8 @@ public:
     void start();
     QVector<StageResult> readResults() const;
 
+    DmmController &operator=(const DmmController &other);
+
 private:
     uint _sweepPoints;
     QVector<uint> _measuredPorts;
@@ -50,6 +59,8 @@ private:
     void clear();
     StageResult readStage(uint i) const;
     RsaToolbox::QRowVector parse(const RsaToolbox::QRowVector &rawData) const;
+
+    void copy(const DmmController &other);
 };
 
 #endif // DMMCONTROLLER_H

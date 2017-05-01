@@ -68,7 +68,7 @@ void DmmTest::test() {
     QCOMPARE(bus->writes(), startWrites);
 
     bus->clearWrites();
-    QRowVector readData = dmm.readData();
+    QRowVector readData = dmm.readData(101);
     QVERIFY(!bus->isReadsLeft());
     QCOMPARE(bus->writes(), readDataWrites);
     QCOMPARE(data, readData);

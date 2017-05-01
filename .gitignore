@@ -5,3 +5,4 @@ build/
 test/output/
 rsatoolbox/
 *.pro.user
+test/logs

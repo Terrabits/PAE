@@ -13,9 +13,12 @@
 #include <QObject>
 #include <QString>
 
+class MeasurePaeTest;
 
 class MeasurePAE : public QObject
 {
+    friend class MeasurePaeTest;
+
     Q_OBJECT
 public:
     enum /*class*/ Calculation {
@@ -87,6 +90,8 @@ private:
     RsaToolbox::QRowVector read_W(const QString &name) const;
     RsaToolbox::QRowVector calculatePin_W () const;
     RsaToolbox::QRowVector calculatePout_W() const;
+
+    mutable QVector<StageResult> _results;
 
 };
 
