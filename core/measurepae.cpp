@@ -196,12 +196,7 @@ QRowVector MeasurePAE::efficiency_pct() const {
     else {
         numerator = pout_W();
     }
-    qDebug() << "pout.size: " << pout_W().size();
-    qDebug() << "pin.size: " << pin_W().size();
-    qDebug() << "numerator.size: " << numerator.size();
-    qDebug() << "dcpower.size: " << dcPower_W().size();
     QRowVector efficiency = divideEach(numerator, dcPower_W());
-    qDebug() << "efficiency.size: " << efficiency.size();
     return multiply(efficiency, 100.0);
 }
 

@@ -87,10 +87,9 @@ DmmController MeasurePaeTest::controller() {
     ports << 1 << 2 << 3 << 4;
     const uint sourceIndex = ports.indexOf(sourcePort);
     QRowVector read(points * ports.size(), 0);
-    for (int i = 0; i < points; i++) {
+    for (uint i = 0; i < points; i++) {
         int j = ports.size() * i + sourceIndex;
         read[j] = 1.0e-6;
-
     }
     const QString readString = toString(read, ",");
     QVariantList readList;
