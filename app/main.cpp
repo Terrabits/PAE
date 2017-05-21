@@ -40,14 +40,17 @@ int main(int argc, char *argv[])
     if (isNoConnection(vna) || isUnknownModel(vna))
             return(0);
 
+    QString title = "%1 %2";
+    title = title.arg(APP_NAME, APP_VERSION);
+
     MainWindow w(&vna, &keys);
+    w.setWindowTitle(title);
     w.setWindowFlags(w.windowFlags() | Qt::WindowStaysOnTopHint);
     w.show();
     int result = app.exec();
 
     vna.local();
     return result;
-    return app.exec();
 }
 
 bool isAboutMenu(int argc, char *argv[]) {

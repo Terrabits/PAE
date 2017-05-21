@@ -19,7 +19,9 @@ HEADERS     += settings.h \
                dmmcontroller.h \
                stageresult.h \
                measurepae.h \
-               traceswidget.h
+               traceswidget.h \
+    processtrace.h \
+    tracesettings.h
 SOURCES     += dmmdriver.cpp \
                dmm.cpp \
                stagesettings.cpp \
@@ -29,7 +31,9 @@ SOURCES     += dmmdriver.cpp \
                dmmcontroller.cpp \
                stageresult.cpp \
                measurepae.cpp \
-               traceswidget.cpp
+               traceswidget.cpp \
+    processtrace.cpp \
+    tracesettings.cpp
 FORMS +=       stagelistwidget.ui \
                stagedialog.ui \
                traceswidget.ui

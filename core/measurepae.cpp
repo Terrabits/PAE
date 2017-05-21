@@ -1,5 +1,10 @@
 #include "measurepae.h"
 
+
+// Project
+#include "processtrace.h"
+#include "tracesettings.h"
+
 // RsaToolbox
 #include <General.h>
 #include <VnaChannel.h>
@@ -15,8 +20,7 @@ using namespace RsaToolbox;
 MeasurePAE::MeasurePAE(QObject *parent) :
     QObject(parent),
     _vna(0),
-    _calculation(Calculation::powerAddedEfficiency),
-    _channel(0)
+    _calculation(Calculation::powerAddedEfficiency)
 {
 
 }
@@ -146,7 +150,7 @@ QVector<uint> MeasurePAE::sourcePorts() const {
             uint output, input;
             t.networkParameter(param, output, input);
             if (!result.contains(input)) {
-            result << input;
+                result << input;
             }
         }
         if (t.isWaveQuantity()) {
@@ -168,6 +172,7 @@ bool MeasurePAE::hasAcceptableStageInput(QString &message) {
     return _controller.hasAcceptableStageInput(message);
 }
 void MeasurePAE::setStages(const QVector<StageSettings> &stages) {
+    _stages = stages;
     _controller.setStages(stages);
 }
 
@@ -216,6 +221,7 @@ void MeasurePAE::run() {
     _controller.setup();
     _controller.start();
     sweepVna();
+    display();
 }
 
 void MeasurePAE::sweepVna() {
@@ -290,4 +296,78 @@ QRowVector MeasurePAE::calculatePin_W() const {
 QRowVector MeasurePAE::calculatePout_W() const {
     const QRowVector gain = readGain_U();
     return multiplyEach(readPin_W(), multiplyEach(gain, gain));
+}
+
+
+uint MeasurePAE::nextDiagram() const {
+    QVector<uint> diagrams = _vna->diagrams();
+    if (diagrams.isEmpty())
+        return 1;
+
+    return max(diagrams) + 1;
+}
+uint MeasurePAE::outputPort() const {
+    if (isOutputTrace()) {
+        WaveQuantity wave;
+        uint outputPort, sourcePort;
+        _vna->trace(_outputTrace).waveQuantity(wave, outputPort, sourcePort);
+        return outputPort;
+    }
+    else {
+        NetworkParameter parameter;
+        uint outputPort, inputPort;
+        _vna->trace(_gainTrace).networkParameter(parameter, outputPort, inputPort);
+        return outputPort;
+    }
+}
+uint MeasurePAE::inputPort() const {
+    if (isInputTrace()) {
+        WaveQuantity wave;
+        uint inputPort, sourcePort;
+        _vna->trace(_inputTrace).waveQuantity(wave, inputPort, sourcePort);
+        return inputPort;
+    }
+    else {
+        NetworkParameter parameter;
+        uint outputPort, inputPort;
+        _vna->trace(_gainTrace).networkParameter(parameter, outputPort, inputPort);
+        return inputPort;
+    }
+}
+void MeasurePAE::display() const {
+    qDebug() << "Displaying traces";
+    uint channel    = this->channel();
+    uint diagram    = nextDiagram();
+    uint outputPort = this->outputPort();
+    uint inputPort  = this->inputPort();
+
+    // Stage current traces
+    QVector<StageResult> results = stageResults();
+    for (int i = 0; i < _stages.size(); i++) {
+        qDebug() << "  displaying stage " << i;
+        TraceSettings settings;
+        settings.name       = _stages[i].name;
+        settings.channel    = channel;
+        settings.diagram    = diagram;
+        settings.outputPort = outputPort;
+        settings.inputPort  = inputPort;
+        settings.data       = _results[i].current_A();
+        ProcessTrace(settings, _vna);
+    }
+
+    // PAE/DE
+    qDebug() << "  displaying PAE/DE";
+    TraceSettings settings;
+    if (isPowerAddedEfficiency()) {
+        settings.name = "PAE";
+    }
+    else {
+        settings.name = "DE";
+    }
+    settings.channel = channel;
+    settings.diagram = diagram;
+    settings.outputPort = outputPort;
+    settings.inputPort = inputPort;
+    settings.data = efficiency_pct();
+    ProcessTrace(settings, _vna);
 }

@@ -77,7 +77,6 @@ private:
     uint inputTraceChannel () const;
     uint gainTraceChannel  () const;
     uint outputTraceChannel() const;
-    uint    _channel;
 
     QVector<StageSettings> _stages;
     DmmController          _controller;
@@ -92,6 +91,11 @@ private:
     RsaToolbox::QRowVector calculatePout_W() const;
 
     mutable QVector<StageResult> _results;
+
+    uint nextDiagram() const;
+    uint outputPort() const;
+    uint inputPort() const;
+    void display() const;
 
 };
 

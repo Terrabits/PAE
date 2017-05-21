@@ -1,10 +1,15 @@
-#include <QCoreApplication>
+
+
+// Project
+#include "processtrace.h"
+#include "tracesettings.h"
 
 // RsaToolbox
 #include <Vna.h>
 using namespace RsaToolbox;
 
 // Qt
+#include <QCoreApplication>
 #include <QDebug>
 
 
@@ -13,13 +18,22 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     Vna vna(ConnectionType::VisaTcpConnection, "127.0.0.1");
-    VnaTrace data = vna.trace("Trc1");
-    VnaTrace mem  = vna.trace("Mem2[Trc1]");
+    vna.isError();
+//    vna.preset();
+    vna.clearStatus();
+    vna.pause();
 
-    ComplexRowVector x(201, ComplexDouble(75,0));
-    mem.write(x);
+    vna.channel().linearSweep().setPoints(201);
 
-    qDebug() << data.parameter();
-//    return a.exec();
+    TraceSettings settings;
+    settings.name = "PAE_TRACE";
+    settings.channel    = 1;
+    settings.diagram    = 1;
+    settings.outputPort = 2;
+    settings.inputPort  = 1;
+    settings.data = QRowVector(201, 0.1);
+
+    ProcessTrace(settings, &vna);
+
     return 0;
 }
