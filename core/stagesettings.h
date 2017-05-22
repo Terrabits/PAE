@@ -16,10 +16,12 @@ public:
     StageSettings(const QString &name);
     ~StageSettings();
 
-    QString name;
-
     bool hasAcceptableInput() const;
     bool hasAcceptableInput(QString &message) const;
+    
+    bool hasAcceptableName() const;
+    bool hasAcceptableName(QString &message) const;
+    QString name;
 
     bool hasAcceptablePowerSupply() const;
     bool hasAcceptablePowerSupply(QString &message) const;

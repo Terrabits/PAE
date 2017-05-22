@@ -54,7 +54,18 @@ bool StageSettings::hasAcceptableName() const {
     return hasAcceptableName(msg);
 }
 bool StageSettings::hasAcceptableName(QString &message) const {
+    message.clear();
+    if (name.isEmpty()) {
+        message = "*stage name cannot be blank";
+        return false;
+    }
+    QRegExp regex("^[a-z_][0-9a-z_]*$", Qt::CaseInsensitive);
+    if (!regex.exactMatch(name)) {
+        message = "*invalid stage name";
+        return false;
+    }
 
+    return true;
 }
 
 bool StageSettings::hasAcceptablePowerSupply() const {
