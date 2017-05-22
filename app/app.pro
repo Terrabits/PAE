@@ -28,3 +28,4 @@ win32:      RC_FILE = vs2010resources.rc
 
 DEFINES += SOURCE_DIR=\\\"$$PWD\\\"
 CONFIG(debug, debug|release):DEFINES += DEBUG_MODE
+

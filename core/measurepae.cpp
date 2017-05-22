@@ -201,8 +201,7 @@ QRowVector MeasurePAE::efficiency_pct() const {
     else {
         numerator = pout_W();
     }
-    QRowVector efficiency = divideEach(numerator, dcPower_W());
-    return multiply(efficiency, 100.0);
+    return divideEach(numerator, dcPower_W());
 }
 
 void MeasurePAE::run() {
@@ -222,11 +221,13 @@ void MeasurePAE::run() {
     _controller.start();
     sweepVna();
     display();
+    _vna->channel(this->channel()).select();
 }
 
 void MeasurePAE::sweepVna() {
     VnaChannel ch = _vna->channel(channel());
     uint timeout_ms = 2 * ch.sweepTime_ms() + 5000;
+    _vna->manualSweepOn();
     ch.startSweep();
     _vna->pause(timeout_ms);
 }
@@ -335,8 +336,8 @@ uint MeasurePAE::inputPort() const {
     }
 }
 void MeasurePAE::display() const {
-    qDebug() << "Displaying traces";
-    uint channel    = this->channel();
+    _vna->channel(this->channel()).select();
+    uint channel    = _vna->createChannel();
     uint diagram    = nextDiagram();
     uint outputPort = this->outputPort();
     uint inputPort  = this->inputPort();
@@ -344,7 +345,6 @@ void MeasurePAE::display() const {
     // Stage current traces
     QVector<StageResult> results = stageResults();
     for (int i = 0; i < _stages.size(); i++) {
-        qDebug() << "  displaying stage " << i;
         TraceSettings settings;
         settings.name       = _stages[i].name;
         settings.channel    = channel;
@@ -356,7 +356,6 @@ void MeasurePAE::display() const {
     }
 
     // PAE/DE
-    qDebug() << "  displaying PAE/DE";
     TraceSettings settings;
     if (isPowerAddedEfficiency()) {
         settings.name = "PAE";
@@ -370,4 +369,8 @@ void MeasurePAE::display() const {
     settings.inputPort = inputPort;
     settings.data = efficiency_pct();
     ProcessTrace(settings, _vna);
+
+    if (_vna->channel(channel).traces().isEmpty()) {
+        _vna->deleteChannel(channel);
+    }
 }

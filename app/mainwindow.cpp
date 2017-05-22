@@ -126,8 +126,6 @@ void MainWindow::init() {
     if (okButton) {
         okButton->setText("Run");
     }
-
-
 }
 
 bool MainWindow::hasAcceptableInput() {

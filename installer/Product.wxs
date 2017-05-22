@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Product Id="*" Language="1033"
+             Name="R&amp;S PAE"
+             Version="0.5"
+             Manufacturer="Rohde &amp; Schwarz"
+             UpgradeCode="4a82ecfd-0d1b-4d6b-b639-8aeb5c3f6614">
+        <Package       InstallerVersion="200" Compressed="yes" InstallScope="perMachine"              />
+        <MajorUpgrade  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate EmbedCab="yes"                              />
+        <WixVariable   Id="WixUILicenseRtf"  Value="license.rtf"   />
+        <WixVariable   Id="WixUIBannerBmp"   Value="banner.bmp"    />
+        <WixVariable   Id="WixUIDialogBmp"   Value="dialog.bmp"    />
+        <Property      Id="ARPPRODUCTICON"   Value="icon.ico"      />
+        <Property      Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+        <UIRef         Id="WixUI_InstallDir"                       />
+        <Icon Id="icon.ico" SourceFile="icon.ico"                  />
+        <Feature Id="IMSpacingSweep" Title="R&amp;S PAE" Description="Application" Level="1">
+            <!-- Licenses       -->
+            <ComponentRef Id="MSVCLicense"     />
+            <ComponentRef Id="QCPLicense"      />
+            <ComponentRef Id="QtLicense"       />
+            <ComponentRef Id="QuaZIPLicense"   />
+            <ComponentRef Id="RSLicense"       />
+            <ComponentRef Id="ZLibLicense"     />
+            <!-- MSVC++ Runtime -->
+            <ComponentRef Id="msvcp100"        />
+            <ComponentRef Id="msvcr100"        />
+            <!-- Qt5 Platform   -->
+            <ComponentRef Id="qwindows"        />
+            <!-- Qt5            -->
+            <ComponentRef Id="D3DCompiler_43"  />
+            <ComponentRef Id="icudt51"         />
+            <ComponentRef Id="icuin51"         />
+            <ComponentRef Id="icuuc51"         />
+            <ComponentRef Id="libEGL"          />
+            <ComponentRef Id="libGLESv2"       />
+            <ComponentRef Id="Qt5Core"         />
+            <ComponentRef Id="Qt5Gui"          />
+            <ComponentRef Id="Qt5PrintSupport" />
+            <ComponentRef Id="Qt5Widgets"      />
+            <!-- R&S Visa       -->
+            <ComponentRef Id="RsVisa32"        />
+            <!-- Executable     -->
+            <ComponentRef Id="Executable"      />
+            <!-- Program Data   -->
+            <ComponentRef Id="SettingsFolder"  />
+            <!-- External tools -->
+            <ComponentRef Id="ZnbShortcut"     />
+            <ComponentRef Id="ZvaShortcut"     />
+            <!-- Start menu     -->
+            <ComponentRef Id="StartShortcuts"  />
+        </Feature>
+    </Product>
+
+    <!-- Directories -->
+    <Fragment>
+    <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"                                                            />
+    <SetDirectory Id="ZnbExternalTools" Value="[WindowsVolume]\Rohde&amp;Schwarz\Nwa\External Tools"                    />
+    <SetDirectory Id="ZvaExternalTools" Value="[WindowsVolume]\Users\Public\Documents\Rohde-Schwarz\Vna\External Tools" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="ZnbExternalTools" />
+        <Directory Id="ZvaExternalTools" />
+        <Directory Id="WINDOWSVOLUME">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="CompanyFilesFolder"  Name="Rohde-Schwarz">
+                    <Directory Id="INSTALLFOLDER"   Name="PAE">
+                        <Directory Id="Platforms"   Name="Platforms" />
+                        <Directory Id="Licenses"    Name="Licenses"  />
+                    </Directory>
+                </Directory>
+            </Directory>
+            <Directory Id="StartMenuFolder">
+                <Directory Id="StartFolder"         Name="R&amp;S PAE" />
+            </Directory>
+            <Directory Id="CommonAppDataFolder">
+                <Directory Id="CompanyDataFolder"   Name="Rohde-Schwarz">
+                    <Directory Id="MyAppDataFolder" Name="PAE">
+                        <Directory Id="Settings"    Name="Settings" />
+                    </Directory>
+                </Directory>
+            </Directory>
+        </Directory>
+    </Directory>
+    </Fragment>
+
+    <!-- Component Definitions -->
+    <Fragment>
+        <!-- Licenses       -->
+        <Component Id="MSVCLicense" Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\Microsoft Visual C++ 2010 License.txt" KeyPath="yes" />
+        </Component>
+        <Component Id="QCPLicense" Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\QCustomPlot - GNU General Public License Version 3.txt" KeyPath="yes" />
+        </Component>
+        <Component Id="QtLicense"   Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\Qt 5 - GNU Lesser General Public License Version 2.1.txt" KeyPath="yes" />
+        </Component>
+        <Component Id="QuaZIPLicense"   Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\QuaZip - GNU General Public License v2.1.txt" KeyPath="yes" />
+        </Component>
+        <Component Id="RSLicense"   Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\R&amp;S Terms and Conditions for Royalty-Free Products.txt" KeyPath="yes" />
+        </Component>
+        <Component Id="ZLibLicense"   Guid="*" Directory="Licenses">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Licenses\ZLib Copyright and Terms and Conditions.txt" KeyPath="yes" />
+        </Component>
+        <!-- MSVC++ Runtime -->
+        <Component Id="msvcp100"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\msvcp100.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="msvcr100"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\msvcr100.dll" KeyPath="yes" />
+        </Component>
+        <!-- Qt5 Platform   -->
+        <Component Id="qwindows"   Guid="*" Directory="Platforms">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Platforms\qwindows.dll" KeyPath="yes" />
+        </Component>
+        <!-- Qt5            -->
+        <Component Id="D3DCompiler_43"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\D3DCompiler_43.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="icudt51"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\icudt51.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="icuin51"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\icuin51.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="icuuc51"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\icuuc51.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="libEGL"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\libEGL.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="libGLESv2"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\libGLESv2.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="Qt5Core"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Qt5Core.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="Qt5Gui"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Qt5Gui.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="Qt5PrintSupport" Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Qt5PrintSupport.dll" KeyPath="yes" />
+        </Component>
+        <Component Id="Qt5Widgets" Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\Qt5Widgets.dll" KeyPath="yes" />
+        </Component>
+        <!-- R&S Visa       -->
+        <Component Id="RsVisa32"   Guid="*" Directory="INSTALLFOLDER">
+            <File Source="[ProgramFiles]\Rohde-Schwarz\PAE\RsVisa32.dll" KeyPath="yes" />
+        </Component>
+        <!-- Executable     -->
+        <Component Id="Executable"   Guid="*" Directory="INSTALLFOLDER">
+            <File Name="R&amp;S PAE.exe" Source="..\build\Desktop_Qt_5_2_1_MSVC2010_32bit\Release\app\release\PAE.exe" KeyPath="yes" />
+        </Component>
+        <!-- Program Data   -->
+        <Component Id="SettingsFolder" Guid="*" Directory="MyAppDataFolder">
+            <RegistryKey Root="HKCU" Key="Software\Rohde-Schwarz\PAE\SettingsFolder">
+                <RegistryValue Value="[MyAppDataFolder]\Settings" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            <CreateFolder Directory="Settings" />
+            <RemoveFile   Id="RemoveSettings" Directory="Settings" Name="*.*" On="uninstall" />
+            <RemoveFile   Id="RemoveLogs" Name="*.*" On="uninstall" />
+            <RemoveFolder Id="RemoveSettingsFolder" Directory="Settings" On="uninstall" />
+            <RemoveFolder Id="RemoveMyAppDataFolder" On="uninstall" />
+        </Component>
+        <!-- External Tools -->
+        <Component Id="ZnbShortcut" Guid="*" Directory="ZnbExternalTools">
+            <RegistryKey Root="HKCU" Key="Software\Rohde-Schwarz\PAE\ZnbExternalTools">
+                <RegistryValue Value="C:\Users\Public\Documents\Rohde-Schwarz\Vna\External Tools\PAE.lnk" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            <Shortcut Id="ZnbShortcutId" Name="PAE" Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]\R&amp;S PAE.exe" />
+        </Component>
+        <Component Id="ZvaShortcut" Guid="*" Directory="ZvaExternalTools">
+            <RegistryKey Root="HKCU" Key="Software\Rohde-Schwarz\PAE\ZvaExternalTools">
+                <RegistryValue Value="C:\Rohde&amp;Schwarz\Nwa\External Tools\PAE.lnk" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            <Shortcut Id="ZvaShortcutId" Name="PAE" Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]\R&amp;S PAE.exe" />
+        </Component>
+        <!-- Start menu     -->
+        <Component Id="StartShortcuts" Guid="*" Directory="StartFolder">
+            <RegistryKey Root="HKCU" Key="Software\Rohde-Schwarz\PAE\StartShortcuts">
+                <RegistryValue Value="[StartMenu]\R&amp;S PAE\*" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            <Shortcut Id="AboutShortcut"     Name="About"             Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]\R&amp;S PAE.exe" Arguments="-about" />
+            <Shortcut Id="AppShortcut"       Name="PAE"  Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]\R&amp;S PAE.exe" />
+            <Shortcut Id="LogsShortcut"      Name="Logs"              Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[WindowsFolder]\explorer.exe"                 Arguments="&quot;[MyAppDataFolder]&quot;" />
+            <Shortcut Id="UninstallShortcut" Name="Uninstall"         Icon="icon.ico" WorkingDirectory="INSTALLFOLDER" Target="[SystemFolder]\msiexec.exe"                   Arguments="/x [ProductCode]" />
+            <RemoveFolder Id="RemoveStartFolder" Directory="StartFolder" On="uninstall" />
+        </Component>
+    </Fragment>
+</Wix>

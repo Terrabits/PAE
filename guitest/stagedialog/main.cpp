@@ -5,6 +5,9 @@
 #include "stagedialog.h"
 #include "stagesettings.h"
 
+// RsaToolbox
+#include <Keys.h>
+
 // Qt
 #include <QApplication>
 #include <QDebug>
@@ -16,7 +19,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    StageDialog dialog;
+    RsaToolbox::Keys keys(KEY_PATH);
+
+    StageDialog dialog(&keys);
     dialog.show();
     app.exec();
 

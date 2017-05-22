@@ -10,6 +10,7 @@ using namespace RsaToolbox;
 
 // Qt
 #include <QFileInfo>
+#include <QRegExp>
 
 
 StageSettings::StageSettings()
@@ -32,6 +33,8 @@ bool StageSettings::hasAcceptableInput() const {
 }
 bool StageSettings::hasAcceptableInput(QString &message) const {
     message.clear();
+    if (!hasAcceptableName(message))
+        return false;
     if (!hasAcceptablePowerSupply(message))
         return false;
     if (!hasAcceptableShuntResistor(message))
@@ -44,6 +47,14 @@ bool StageSettings::hasAcceptableInput(QString &message) const {
         return false;
 
     return true;
+}
+
+bool StageSettings::hasAcceptableName() const {
+    QString msg;
+    return hasAcceptableName(msg);
+}
+bool StageSettings::hasAcceptableName(QString &message) const {
+
 }
 
 bool StageSettings::hasAcceptablePowerSupply() const {

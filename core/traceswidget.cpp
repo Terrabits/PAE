@@ -65,19 +65,19 @@ QString TracesWidget::inputTrace() const {
     if (isInputTrace())
         return ui->inputPowerTrace->currentText();
     else
-        return "";
+        return QString();
 }
 QString TracesWidget::gainTrace() const {
     if (isGainTrace())
         return ui->gainTrace->currentText();
     else
-        return "";
+        return QString();
 }
 QString TracesWidget::outputTrace() const {
     if (isOutputTrace())
         return ui->outputPowerTrace->currentText();
     else
-        return "";
+        return QString();
 }
 
 void TracesWidget::on_clearInputPower_clicked() {
@@ -97,6 +97,9 @@ bool TracesWidget::isKeys() const {
     return _keys != 0;
 }
 void TracesWidget::loadKeys() {
+    if (!isKeys())
+        return;
+
     QString name;
     if (_keys->exists("PAE_INPUT_TRACE")) {
         _keys->get("PAE_INPUT_TRACE", name);
@@ -112,9 +115,18 @@ void TracesWidget::loadKeys() {
     }
 }
 void TracesWidget::saveKeys() const {
-    _keys->set("PAE_INPUT_TRACE",  inputTrace());
-    _keys->set("PAE_GAIN_TRACE",   gainTrace());
-    _keys->set("PAE_OUTPUT_TRACE", outputTrace());
+    if (!isKeys())
+        return;
+
+    if (isInputTrace()) {
+        _keys->set("PAE_INPUT_TRACE",  inputTrace());
+    }
+    if (isGainTrace()) {
+        _keys->set("PAE_GAIN_TRACE",   gainTrace());
+    }
+    if (isOutputTrace()) {
+        _keys->set("PAE_OUTPUT_TRACE", outputTrace());
+    }
 }
 
 void TracesWidget::clearInputTrace() {

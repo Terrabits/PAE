@@ -19,21 +19,31 @@ int main(int argc, char *argv[])
 
     Vna vna(ConnectionType::VisaTcpConnection, "127.0.0.1");
     vna.isError();
-//    vna.preset();
+    vna.preset();
     vna.clearStatus();
     vna.pause();
 
-    vna.channel().linearSweep().setPoints(201);
+    VnaChannel ch1 = vna.channel(1);
+    ch1.linearSweep().setPoints(1);
 
-    TraceSettings settings;
-    settings.name = "PAE_TRACE";
-    settings.channel    = 1;
-    settings.diagram    = 1;
-    settings.outputPort = 2;
-    settings.inputPort  = 1;
-    settings.data = QRowVector(201, 0.1);
+    vna.createTrace("_stage_1_A", 1);
+    VnaTrace dataTrc = vna.trace("_stage_1_A");
+    dataTrc.setParameter("PAE21");
+    dataTrc.toMemory("stage_1_A");
+    VnaTrace memTrc = vna.trace("stage_1_A");
 
-    ProcessTrace(settings, &vna);
+    vna.createDiagram(2);
+    dataTrc.setDiagram(2);
+    memTrc .setDiagram(2);
+
+
+    ComplexRowVector ycomp(1, ComplexDouble(1,0));
+    memTrc.write(ycomp);
+
+    QRowVector y;
+    memTrc.y(y);
+    qDebug() << y[0];
+    qDebug() << memTrc.y()[0].real() << memTrc.y()[0].imag();
 
     return 0;
 }

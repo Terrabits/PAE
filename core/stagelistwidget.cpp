@@ -57,6 +57,9 @@ bool StageListWidget::isKeys() const {
     return _keys != 0;
 }
 void StageListWidget::loadKeys() {
+    if (!isKeys())
+        return;
+
     QVector<StageSettings> settings;
     if (_keys->exists("PAE_STAGES")) {
         _keys->get("PAE_STAGES", settings);
@@ -64,6 +67,8 @@ void StageListWidget::loadKeys() {
     }
 }
 void StageListWidget::saveKeys() const {
+    if (!isKeys())
+        return;
     _keys->set("PAE_STAGES", stages());
 }
 void StageListWidget::setKeys(RsaToolbox::Keys *keys) {
@@ -77,7 +82,7 @@ void StageListWidget::tableDoubleClicked(const QModelIndex &index) {
     const int row    = index.row();
     const int column = index.column();
     QVector<StageSettings> settings = _model->settings();
-    StageDialog dialog(QApplication::activeWindow());
+    StageDialog dialog(_keys, QApplication::activeWindow());
     dialog.setSettings(settings[row]);
     switch (column) {
     case StageSettingsModel::Column::name:
@@ -107,28 +112,4 @@ void StageListWidget::tableDoubleClicked(const QModelIndex &index) {
     // Handle changes
     settings[row] = dialog.settings();
     _model->setSettings(settings);
-}
-void StageListWidget::addStage() {
-    QString name = "Stage %1";
-    name = name.arg(_model->settings().size()+1);
-
-    StageDialog dialog(this);
-    dialog.setSettings(StageSettings(name));
-    dialog.exec();
-
-    if (dialog.result() != QDialog::Accepted)
-        return;
-
-    QVector<StageSettings> settings = _model->settings();
-    settings << dialog.settings();
-    _model->setSettings(settings);
-}
-void StageListWidget::removeStage() {
-
-}
-void StageListWidget::moveStageUp() {
-
-}
-void StageListWidget::moveStageDown() {
-
 }

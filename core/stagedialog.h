@@ -6,6 +6,7 @@
 #include "stagesettings.h"
 
 // RsaToolbox
+#include <Keys.h>
 #include <LastPath.h>
 
 // Qt
@@ -21,7 +22,7 @@ class StageDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit StageDialog(QWidget *parent = 0);
+    explicit StageDialog(RsaToolbox::Keys *keys, QWidget *parent = 0);
     ~StageDialog();
 
     void highlightName();

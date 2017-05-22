@@ -38,7 +38,7 @@ private:
     void createTrace();
     void updateTrace();
 
-    void debugPrint(const QString &name);
+    static RsaToolbox::ComplexRowVector toComplexVector(const RsaToolbox::QRowVector &vector);
 };
 
 #endif // PROCESSTRACE_H

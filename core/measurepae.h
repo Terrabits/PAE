@@ -7,11 +7,13 @@
 #include "stageresult.h"
 
 // RsaToolbox
+#include <Definitions.h>
 #include <Vna.h>
 
 // Qt
 #include <QObject>
 #include <QString>
+#include <QVector>
 
 class MeasurePaeTest;
 
@@ -96,7 +98,6 @@ private:
     uint outputPort() const;
     uint inputPort() const;
     void display() const;
-
 };
 
 #endif // MEASUREPAE_H

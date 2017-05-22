@@ -83,5 +83,13 @@ void ProcessTrace::updateTrace() {
     _dataTrace.toMemory(memoryTraceName());
 
     VnaTrace memTrace = memoryTrace();
-    memTrace.write(_settings.data);
+    memTrace.write(toComplexVector(_settings.data));
+}
+
+ComplexRowVector ProcessTrace::toComplexVector(const QRowVector &vector) {
+    ComplexRowVector result(vector.size());
+    for (int i = 0; i < vector.size(); i++) {
+        result[i] = ComplexDouble(vector[i], 0);
+    }
+    return result;
 }

@@ -36,10 +36,10 @@ MeasurePaeTest::~MeasurePaeTest()
 
 void MeasurePaeTest::test() {
     if (_vna->properties().isZnbFamily()) {
-        _vna->openSet(_fixtures.filePath("znb8-4port"));
+        _vna->openSet(_fixtures.filePath("znb-4port"));
     }
     else if (_vna->properties().isZvaFamily()) {
-        _vna->openSet(_fixtures.filePath("zva"));
+        _vna->openSet(_fixtures.filePath("zva-4port"));
     }
     _vna->pause();
 
@@ -82,15 +82,19 @@ void MeasurePaeTest::test() {
 QVector<StageSettings> MeasurePaeTest::stages() {
     const QString driverPath = _fixtures.filePath("../example_driver.json");
     StageSettings stage;
-    stage.name           = "stage_1";
+    stage.name           = "stage_1_A";
     stage.powerSupply_V  = 5.0;
     stage.shuntResistor_ohms = 1.0e-3;
     stage.connectionType = ConnectionType::VisaTcpConnection;
     stage.address        = "127.0.0.1";
     stage.driverPath     = driverPath;
 
-    const uint numStages = 3;
-    QVector<StageSettings> stages(numStages, stage);
+    QVector<StageSettings> stages;
+    stages << stage;
+    stage.name = "stage_2_A";
+    stages << stage;
+    stage.name = "stage_3_A";
+    stages << stage;
     return stages;
 }
 
@@ -125,38 +129,3 @@ DmmController MeasurePaeTest::controller() {
     return controller;
 }
 
-//QStringList MeasurePaeTest::vnaReads() {
-//    QMap<QString, QString> map;
-//    map["*IDN?"] = "Rohde-Schwarz,ZNB20-4Port,1311601064100104,2.70";
-//    map["*OPT?"] = "ZNB-K2,ZNB-K4,ZNB-K14,ZNB-K17,ZNB-K19,ZNB-K20,ZNB8-B24,ZNB8-B31,ZNB8-B32,ZNB8-B33,ZNB8-B34,ZNB-B81,ZNB-B2,ZN-B15";
-//    map["*OPC?"] = "1";
-//    map[":MMEM:CDIR?"] = "\'C:\Users\Public\Documents\Rohde-Schwarz\VNA\'";
-//    map[":SENS1:SWE:POIN?"] = "201";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'a1\'"] = "1";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'b2\'"] = "1";
-//    map[":SENS1:SWE:TYPE?"] = "LIN";
-//    map[":SENS1:SWE:TIME?"] = "0.0175875";
-//    map[":SYST:FREQ? MAX"] = "20000000000";
-//    map[":DISP:CAT?"] = "\'1,1,2,2,3,3\'";
-//    map[":CALC1:PAR:MEAS? \'b2\'"] = "\'B2D1SAM\'";
-//    map[":CALC1:PAR:MEAS? \'a1\'"] = "\'A1D1SAM'";
-////    map[":CONF:TRAC:CAT?"] = ["\'1,S21,2,a1,3,b2\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'", "\'1,S21,2,a1,3,b2,4,_stage_1,5,stage_1\'"];
-//    map[":SOUR1:LPOR1?"] = "1";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'_stage_1\'"] = "1";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'stage_1\'"] = "1";
-//    map[":CALC1:FORM?"] = "MLIN";
-//    map[":INIT1:CONT?"] = "1";
-//    map[":FORM?"] = "REAL,64";
-//    map[":FORM:BORD?"] = "SWAP";
-//    map[":CALC:DATA:TRAC? \'a1\', FDAT"] = "TODO";
-//    map[":CALC:DATA:TRAC? \'b2\', FDAT"] = "TODO";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'_PAE\'"] = "1";
-//    map[":CONF:TRAC:CHAN:NAME:ID? \'PAE\'"] = "1";
-//    map[""] = "";
-//    map[""] = "";
-//    map[""] = "";
-//    map[""] = "";
-
-
-//    map[""] = "";
-//}

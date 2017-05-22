@@ -44,10 +44,6 @@ signals:
 
 private slots:
     void tableDoubleClicked(const QModelIndex &index);
-    void addStage();
-    void removeStage();
-    void moveStageUp();
-    void moveStageDown();
 
 private:
     Ui::StageListWidget *ui;

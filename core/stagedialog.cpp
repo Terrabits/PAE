@@ -8,6 +8,7 @@ using namespace RsaToolbox;
 
 // Qt
 #include <QApplication>
+#include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QRegExp>
@@ -15,7 +16,7 @@ using namespace RsaToolbox;
 #include <QScopedPointer>
 
 
-StageDialog::StageDialog(QWidget *parent) :
+StageDialog::StageDialog(Keys *keys, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::StageDialog)
 {
@@ -43,6 +44,8 @@ StageDialog::StageDialog(QWidget *parent) :
             this, SLOT(getDriver()));
 
     blockSignals(isBlocked);
+    _lastPath.setPath(QDir::homePath());
+    _lastPath.setKey(keys, "PAE_DRIVER_PATH");
 }
 
 StageDialog::~StageDialog()
@@ -96,12 +99,13 @@ void StageDialog::setSettings(const StageSettings &settings) {
 void StageDialog::getDriver() {
     QString result = QFileDialog::getOpenFileName(QApplication::activeWindow(),
                                  "Open driver...",
-                                 "",
+                                 _lastPath.toString(),
                                  "Driver (*.json)");
 
     if (result.isEmpty())
         return;
 
+    _lastPath.setFromFilePath(result);
     setDriver(result);
 }
 void StageDialog::setDriver(const QString &driver) {
