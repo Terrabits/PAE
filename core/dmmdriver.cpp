@@ -14,12 +14,7 @@ DmmDriver::DmmDriver()
     init();
 }
 DmmDriver::DmmDriver(const DmmDriver &other) {
-    setupScpi         = other.setupScpi;
-    setPointsScpi     = other.setPointsScpi;
-    startScpi         = other.startScpi;
-    sleepAfterStart_s = other.sleepAfterStart_s;
-    queryDataScpi     = other.queryDataScpi;
-    measurementType   = other.measurementType;
+    copy(other);
 }
 
 DmmDriver::DmmDriver(const QString &filename)
@@ -70,24 +65,19 @@ MeasurementType DmmDriver::toMeasurementType(const QString &string) {
 }
 
 void DmmDriver::operator=(const DmmDriver &other) {
-    setupScpi         = other.setupScpi;
-    setPointsScpi     = other.setPointsScpi;
-    startScpi         = other.startScpi;
-    sleepAfterStart_s = other.sleepAfterStart_s;
-    queryDataScpi     = other.queryDataScpi;
-    measurementType   = other.measurementType;
+    copy(other);
 }
 
 void DmmDriver::init() {
-    _isOpen = false;
-    _filename.clear();
-
     setupScpi.clear();
     setPointsScpi.clear();
     startScpi.clear();
     sleepAfterStart_s = 100E-3;
     queryDataScpi.clear();
     measurementType = MeasurementType::voltage;
+
+    _isOpen = false;
+    _filename.clear();
 }
 
 bool DmmDriver::open(const QString &filename) {
@@ -120,8 +110,19 @@ bool DmmDriver::open(const QString &filename) {
     sleepAfterStart_s = json["sleep after start scpi"].toDouble();
     queryDataScpi     = json["query data scpi"].toString();
     measurementType   = toMeasurementType(json["measurement type"].toString());
-    _isOpen = true;
+    _isOpen           = true;
     return true;
+}
+
+void DmmDriver::copy(const DmmDriver &other) {
+    setupScpi         = other.setupScpi;
+    setPointsScpi     = other.setPointsScpi;
+    startScpi         = other.startScpi;
+    sleepAfterStart_s = other.sleepAfterStart_s;
+    queryDataScpi     = other.queryDataScpi;
+    measurementType   = other.measurementType;
+    _filename         = other._filename;
+    _isOpen           = other._isOpen;
 }
 
 bool operator==(const DmmDriver &left, const DmmDriver &right) {

@@ -41,6 +41,8 @@ private:
     QString _filename;
     void init();
     bool open(const QString &filename);
+
+    void copy(const DmmDriver &other);
 };
 
 bool operator==(const DmmDriver &left, const DmmDriver &right);
