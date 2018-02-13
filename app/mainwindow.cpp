@@ -82,6 +82,7 @@ void MainWindow::run() {
         return;
     }
 
+    _isError = false;
     _measure->moveToThread(_thread.data());
     connectMeasure();
     QMetaObject::invokeMethod(_measure.data(), "run");
@@ -127,6 +128,10 @@ void MainWindow::init() {
     ui->stageList->setKeys(_keys);
     loadKeys();
 
+    if (ui->stageList->stages().isEmpty()) {
+        ui->stageList->addStage();
+    }
+
     connect(ui->traces, SIGNAL(error(QString)),
             this, SLOT(showError(QString)));
     connect(ui->stageList, SIGNAL(error(QString)),
@@ -142,6 +147,7 @@ void MainWindow::init() {
         okButton->setText("Run");
     }
 
+    _isError = false;
     _thread.reset(new QThread);
     _thread->start();
 }
@@ -184,12 +190,24 @@ void MainWindow::connectMeasure() {
     connect(_measure.data(), SIGNAL(started()),
             this,            SLOT  (disableInputs()));
     connect(_measure.data(), SIGNAL(error(QString)),
-            this,            SLOT  (showError(QString)));
+            this,            SLOT  (error(QString)));
     connect(_measure.data(), SIGNAL(finished()),
             this,            SLOT  (enableInputs()));
     connect(_measure.data(), SIGNAL(finished()),
-            this,            SLOT(disconnectMeasure()));
+            this,            SLOT  (disconnectMeasure()));
+    connect(_measure.data(), SIGNAL(finished()),
+            this,            SLOT  (measurementComplete()));
 }
 void MainWindow::disconnectMeasure() {
     _measure->disconnect();
+}
+void MainWindow::error(const QString &message) {
+    _isError = true;
+    showError(message);
+}
+void MainWindow::measurementComplete() {
+    if (_isError) {
+        return;
+    }
+    ui->error->showMessage("Measurement complete.", Qt::darkGreen);
 }

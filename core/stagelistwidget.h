@@ -33,6 +33,8 @@ public:
 
     bool hasAcceptableInput() const;
     bool hasAcceptableInput(QString &message) const;
+
+    void addStage(int index = 0);
     QVector<StageSettings> stages() const;
 
     bool isKeys() const;

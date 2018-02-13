@@ -1,0 +1,18 @@
+{
+  "setup scpi": [
+    "SENS:VOLT:DC:RANG 100 mV",
+    "SENS:VOLT:DC:NPLC 0.001",
+    "TRIG:SOUR EXT",
+    "TRIG:DEL 10us",
+    "TRIG:SLOP POS",
+    "SAMP:SOUR IMM",
+    "SAMP:COUN 1",
+    "FORM:DATA ASC",
+    "FORM:BORD NORM"
+  ],
+  "set points scpi":        "TRIG:COUN %1",
+  "start scpi":             "INIT",
+  "sleep after start scpi": 100e-3,
+  "query data scpi":        "FETC?",
+  "measurement type":       "voltage"
+}

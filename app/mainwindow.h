@@ -30,16 +30,15 @@ public:
     MainWindow(RsaToolbox::Vna *vna, RsaToolbox::Keys *keys, QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-    void showError(const QString &message);
-    void displayMeasurementComplete();
-
 private slots:
     void run();
     void disableInputs();
     void enableInputs();
     void connectMeasure();
     void disconnectMeasure();
+    void error(const QString &message);
+    void showError(const QString &message);
+    void measurementComplete();
 
 protected:
     virtual void closeEvent(QCloseEvent *event);
@@ -60,6 +59,7 @@ private:
     TracesWidget::Calculation calculation() const;
     void setCalculation(TracesWidget::Calculation calc);
 
+    bool _isError;
     QScopedPointer<QThread>    _thread;
     QScopedPointer<MeasurePAE> _measure;
 

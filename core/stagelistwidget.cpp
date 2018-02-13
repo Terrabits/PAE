@@ -49,6 +49,15 @@ bool StageListWidget::hasAcceptableInput(QString &message) const {
     controller.setStages(stages());
     return controller.hasAcceptableStageInput(message);
 }
+
+void StageListWidget::addStage(int row) {
+    if (!_model) {
+        return;
+    }
+
+    _model->insertRow(row);
+}
+
 QVector<StageSettings> StageListWidget::stages() const {
     return _model->settings();
 }
@@ -106,8 +115,9 @@ void StageListWidget::tableDoubleClicked(const QModelIndex &index) {
     }
     dialog.exec();
 
-    if (dialog.result() != QDialog::Accepted)
+    if (dialog.result() != QDialog::Accepted) {
         return;
+    }
 
     // Handle changes
     settings[row] = dialog.settings();

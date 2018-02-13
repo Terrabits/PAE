@@ -8,6 +8,11 @@
 // RsaToolbox
 using namespace RsaToolbox;
 
+// Keys
+const QString INPUT_TRACE("PAE_INPUT_TRACE");
+const QString GAIN_TRACE("PAE_GAIN_TRACE");
+const QString OUTPUT_TRACE("PAE_OUTPUT_TRACE");
+
 
 TracesWidget::TracesWidget(QWidget *parent) :
     QWidget(parent),
@@ -101,16 +106,16 @@ void TracesWidget::loadKeys() {
         return;
 
     QString name;
-    if (_keys->exists("PAE_INPUT_TRACE")) {
-        _keys->get("PAE_INPUT_TRACE", name);
+    if (_keys->exists(INPUT_TRACE)) {
+        _keys->get(INPUT_TRACE, name);
         setInputTrace(name);
     }
-    if (_keys->exists("PAE_GAIN_TRACE")) {
-        _keys->get("PAE_GAIN_TRACE", name);
+    if (_keys->exists(GAIN_TRACE)) {
+        _keys->get(GAIN_TRACE, name);
         setGainTrace(name);
     }
-    if (_keys->exists("PAE_OUTPUT_TRACE")) {
-        _keys->get("PAE_OUTPUT_TRACE", name);
+    if (_keys->exists(OUTPUT_TRACE)) {
+        _keys->get(OUTPUT_TRACE, name);
         setOutputTrace(name);
     }
 }
@@ -119,13 +124,22 @@ void TracesWidget::saveKeys() const {
         return;
 
     if (isInputTrace()) {
-        _keys->set("PAE_INPUT_TRACE",  inputTrace());
+        _keys->set(INPUT_TRACE,  inputTrace());
+    }
+    else {
+        _keys->remove(INPUT_TRACE);
     }
     if (isGainTrace()) {
-        _keys->set("PAE_GAIN_TRACE",   gainTrace());
+        _keys->set(GAIN_TRACE,   gainTrace());
+    }
+    else {
+        _keys->remove(GAIN_TRACE);
     }
     if (isOutputTrace()) {
-        _keys->set("PAE_OUTPUT_TRACE", outputTrace());
+        _keys->set(OUTPUT_TRACE, outputTrace());
+    }
+    else {
+        _keys->remove(OUTPUT_TRACE);
     }
 }
 

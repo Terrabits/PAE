@@ -132,7 +132,7 @@ bool StageSettings::hasAcceptableDriverPath(QString &message) const {
     }
     if (!QFileInfo(driverPath).exists()) {
         message = "*\'%1\' does not exist";
-        message = message.arg(driverPath);
+        message = message.arg(driverFilename());
         return false;
     }
     DmmDriver driver(driverPath);
