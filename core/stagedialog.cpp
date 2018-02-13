@@ -44,12 +44,8 @@ StageDialog::StageDialog(Keys *keys, QWidget *parent) :
             this, SLOT(getDriver()));
 
     blockSignals(isBlocked);
-    qDebug() << "StageDialog:";
-    qDebug() << "  home: " << QDir::homePath();
     _lastPath.setPath(QDir::homePath());
-    qDebug() << "  lastPath: " << _lastPath.toString();
     _lastPath.setKey(keys, "PAE_DRIVER_PATH");
-    qDebug() << "  lastPath: " << _lastPath.toString();
 }
 
 StageDialog::~StageDialog()
@@ -101,7 +97,6 @@ void StageDialog::setSettings(const StageSettings &settings) {
 }
 
 void StageDialog::getDriver() {
-    qDebug() << "StageDialog::getDriver " << _lastPath.toString();
     QString result = QFileDialog::getOpenFileName(QApplication::activeWindow(),
                                  "Open driver...",
                                  _lastPath.toString(),

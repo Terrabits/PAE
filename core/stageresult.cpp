@@ -21,6 +21,10 @@ StageResult::~StageResult()
 
 }
 
+bool StageResult::isEmpty() const {
+    return _current_A.isEmpty() || _voltage_V.isEmpty();
+}
+
 QRowVector StageResult::current_A() const {
     return _current_A;
 }

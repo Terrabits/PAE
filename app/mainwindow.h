@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
 // Project
+#include "measurepae.h"
 #include "traceswidget.h"
 
 // RsaToolbox
@@ -12,6 +12,8 @@
 
 // Qt
 #include <QMainWindow>
+#include <QScopedPointer>
+#include <QThread>
 #include <QVector>
 
 
@@ -29,13 +31,18 @@ public:
     ~MainWindow();
 
 public slots:
-    bool close();
-
-public slots:
     void showError(const QString &message);
+    void displayMeasurementComplete();
 
 private slots:
     void run();
+    void disableInputs();
+    void enableInputs();
+    void connectMeasure();
+    void disconnectMeasure();
+
+protected:
+    virtual void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow *ui;
@@ -52,6 +59,10 @@ private:
 
     TracesWidget::Calculation calculation() const;
     void setCalculation(TracesWidget::Calculation calc);
+
+    QScopedPointer<QThread>    _thread;
+    QScopedPointer<MeasurePAE> _measure;
+
 };
 
 #endif // MAINWINDOW_H

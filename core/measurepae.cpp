@@ -15,6 +15,10 @@ using namespace RsaToolbox;
 
 // stdlib
 #include <algorithm>
+#include <cassert>
+#include <sstream>
+#include <stdexcept>
+
 
 
 MeasurePAE::MeasurePAE(QObject *parent) :
@@ -50,20 +54,50 @@ bool MeasurePAE::hasAcceptableInput(QString &message) {
 bool MeasurePAE::hasAcceptableTraceInput(QString &message) {
     message.clear();
 
-    bool isTraces = false;
-    if (isInputTrace() && isOutputTrace()) {
-        isTraces = true;
+    int traces = 0;
+    if (isInputTrace()) {
+        if (!_vna->isTrace(_inputTrace)) {
+
+            message = "*input trace not found";
+            return false;
+        }
+        else {
+            traces++;
+        }
     }
-    if (isInputTrace() && isGainTrace()) {
-        isTraces = true;
+    if (isGainTrace()) {
+        if (!_vna->isTrace(_gainTrace)) {
+            message = "*gain trace not found";
+            return false;
+        }
+        else {
+            traces++;
+        }
     }
-    if (isGainTrace() && isOutputTrace()) {
-        isTraces = true;
+    if (isOutputTrace()) {
+        if (!_vna->isTrace(_outputTrace)) {
+            message = "*output trace not found";
+            return false;
+        }
+        else {
+            traces++;
+        }
     }
 
-    // Only need output power for de
+    // Check for no traces
+    if (!traces) {
+        message = "*Please provide trace information";
+        return false;
+    }
+
+    // Check for sufficient traces
+    bool isTraces;
     if (isDrainEfficiency() && isOutputTrace()) {
+        // Only need output power for de
         isTraces = true;
+    }
+    else {
+        isTraces = (traces >= 2);
     }
 
     if (!isTraces) {
@@ -79,6 +113,22 @@ bool MeasurePAE::hasAcceptableTraceInput(QString &message) {
 
     if (!isOneChannel()) {
         message = "*traces must be in same channel";
+        return false;
+    }
+
+    // Check for valid ports
+    const uint _inputPort  = inputPort();
+    const uint _outputPort = outputPort();
+    if (!_inputPort) {
+        message = "*cannot determine input port from the given traces";
+        return false;
+    }
+    if (!_outputPort) {
+        message = "*cannot determine the output port from the given traces";
+        return false;
+    }
+    if (_inputPort == _outputPort) {
+        message = "*input port and output port must be different";
         return false;
     }
 
@@ -205,23 +255,31 @@ QRowVector MeasurePAE::efficiency_pct() const {
 }
 
 void MeasurePAE::run() {
+    emit    started();
     _results.clear();
-
     QString msg;
     if (!hasAcceptableInput(msg)) {
         emit error(msg);
+        emit finished();
         return;
     }
     if (!_controller.isConnected(msg)) {
         emit error(msg);
+        emit finished();
         return;
     }
 
+    _controller.setSweepPoints(sweepPoints());
+    _controller.setPorts(sourcePorts(), inputPort());
     _controller.setup();
     _controller.start();
     sweepVna();
-    display();
+    if (!display()) {
+        emit finished();
+        return;
+    }
     _vna->channel(this->channel()).select();
+    emit finished();
 }
 
 void MeasurePAE::sweepVna() {
@@ -328,14 +386,23 @@ uint MeasurePAE::inputPort() const {
         _vna->trace(_inputTrace).waveQuantity(wave, inputPort, sourcePort);
         return inputPort;
     }
-    else {
+    if (isGainTrace()) {
         NetworkParameter parameter;
         uint outputPort, inputPort;
         _vna->trace(_gainTrace).networkParameter(parameter, outputPort, inputPort);
         return inputPort;
     }
+    if (isOutputTrace()) {
+        WaveQuantity wave;
+        uint inputPort, sourcePort;
+        _vna->trace(_outputTrace).waveQuantity(wave, inputPort, sourcePort);
+        return sourcePort;
+    }
+
+    // Error
+    return 0;
 }
-void MeasurePAE::display() const {
+bool MeasurePAE::display() {
     _vna->channel(this->channel()).select();
     uint channel    = _vna->createChannel();
     uint diagram    = nextDiagram();
@@ -345,13 +412,21 @@ void MeasurePAE::display() const {
     // Stage current traces
     QVector<StageResult> results = stageResults();
     for (int i = 0; i < _stages.size(); i++) {
+        const StageResult &result = results[i];
+        if (result.isEmpty()) {
+            QString msg = "Could not read data from DMM stage %1";
+            msg = msg.arg(i+1);
+            qDebug() << "MeasurePAE error: " << msg;
+            emit error(msg);
+            return false;
+        }
         TraceSettings settings;
         settings.name       = _stages[i].name;
         settings.channel    = channel;
         settings.diagram    = diagram;
         settings.outputPort = outputPort;
         settings.inputPort  = inputPort;
-        settings.data       = _results[i].current_A();
+        settings.data       = results[i].current_A();
         ProcessTrace(settings, _vna);
     }
 
@@ -373,4 +448,5 @@ void MeasurePAE::display() const {
     if (_vna->channel(channel).traces().isEmpty()) {
         _vna->deleteChannel(channel);
     }
+    return true;
 }

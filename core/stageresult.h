@@ -19,6 +19,8 @@ public:
     StageResult(const RsaToolbox::QRowVector &dmm_V, const StageSettings &settings);
     ~StageResult();
 
+    bool isEmpty() const;
+
     RsaToolbox::QRowVector current_A() const;
     RsaToolbox::QRowVector voltage_V() const;
     RsaToolbox::QRowVector power_W  () const;

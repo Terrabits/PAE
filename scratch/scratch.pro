@@ -4,16 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT        += core
 
-QT       -= gui
+QT        -= gui
 
 include(../core/core.pri)
-TARGET = scratch
-CONFIG   += console
-CONFIG   -= app_bundle
+TARGET     = scratch
+CONFIG    += console
+CONFIG    -= app_bundle
 
-TEMPLATE = app
+TEMPLATE   = app
+
+SOURCES   += main.cpp
+DISTFILES += log.txt
+
+DEFINES   += SOURCE_DIR=\\\"$$PWD/\\\"
+CONFIG(debug, debug|release):DEFINES += DEBUG_MODE
 
 
-SOURCES += main.cpp

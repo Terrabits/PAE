@@ -36,6 +36,7 @@ public:
 
     bool hasAcceptableStageInput();
     bool hasAcceptableStageInput(QString &message);
+    void addStage(StageSettings settings);
     void setStages(const QVector<StageSettings> &stages);
 
     void setSweepPoints(uint points);
@@ -55,6 +56,7 @@ private:
 
     void createDmms();
     QVector<QSharedPointer<Dmm>> _dmms;
+    QVector<QSharedPointer<RsaToolbox::Log>> _logs;
 
     void clear();
     StageResult readStage(uint i) const;

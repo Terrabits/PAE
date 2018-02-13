@@ -12,6 +12,7 @@
 using namespace RsaToolbox;
 
 // Qt
+#include <QDebug>
 #include <QScopedPointer>
 #include <QSignalSpy>
 #include <QVariant>
@@ -26,7 +27,7 @@ MeasurePaeTest::MeasurePaeTest(ConnectionType type, const QString &address, QObj
     _src.mkpath("logs/measurepaetest");
     _logDir.setPath(_src.filePath("logs/measurepaetest"));
 
-    _logFilenames << "test.txt";
+    _logFilenames << "test log.txt";
 }
 
 MeasurePaeTest::~MeasurePaeTest()
@@ -35,13 +36,17 @@ MeasurePaeTest::~MeasurePaeTest()
 }
 
 void MeasurePaeTest::test() {
+    QString setFilename;
     if (_vna->properties().isZnbFamily()) {
-        _vna->openSet(_fixtures.filePath("znb-4port"));
+        setFilename = "znb-4port.znx";
     }
     else if (_vna->properties().isZvaFamily()) {
-        _vna->openSet(_fixtures.filePath("zva-4port"));
+        setFilename = "zva-4port.zvx";
     }
+    _vna->fileSystem().uploadFile(_fixtures.filePath(setFilename), setFilename, VnaFileSystem::Directory::RECALL_SETS_DIRECTORY);
+    _vna->openSet(setFilename);
     _vna->pause();
+    QVERIFY(!_vna->isError());
 
     MeasurePAE measure;
     measure.setVna(_vna.data());

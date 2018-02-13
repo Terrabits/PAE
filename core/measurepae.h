@@ -56,7 +56,9 @@ public:
     RsaToolbox::QRowVector efficiency_pct() const;
 
 signals:
+    void started();
     void error(const QString &message);
+    void finished();
 
 public slots:
     void run();
@@ -97,7 +99,7 @@ private:
     uint nextDiagram() const;
     uint outputPort() const;
     uint inputPort() const;
-    void display() const;
+    bool display();
 };
 
 #endif // MEASUREPAE_H

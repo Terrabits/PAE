@@ -1,0 +1,20 @@
+{
+  "setup scpi": [
+    "*RST",
+    "*CLS",
+    "SYST:BEEP:STAT OFF",
+    "SENS:VOLT:DC:NPLC 0.006",
+    "TRIG:SOUR EXT",
+    "TRIG:DEL 10us",
+    "TRIG:SLOP POS",
+    "SAMP:SOUR IMM",
+    "SAMP:COUN 1",
+    "FORM:DATA ASC",
+    "FORM:BORD NORM"
+  ],
+  "set points scpi":        "TRIG:COUN %1",
+  "start scpi":             "INIT",
+  "sleep after start scpi": 1,
+  "query data scpi":        "FETC?",
+  "measurement type":       "voltage"
+}

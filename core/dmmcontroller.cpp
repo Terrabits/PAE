@@ -1,11 +1,16 @@
 #include "dmmcontroller.h"
 
+// Project
+#include "settings.h"
 
 // RsaToolbox
 using namespace RsaToolbox;
 
 // Qt
 #include <QDebug>
+
+// stdlib
+#include <cassert>
 
 
 DmmController::DmmController()
@@ -27,6 +32,10 @@ void DmmController::setSweepPoints(uint points) {
 void DmmController::setPorts(const QVector<uint> &measuredPorts, uint inputPort) {
     _measuredPorts = measuredPorts;
     _inputPort = inputPort;
+}
+void DmmController::addStage(StageSettings settings) {
+    _stages.append(settings);
+    createDmms();
 }
 
 void DmmController::setStages(const QVector<StageSettings> &stages) {
@@ -128,9 +137,16 @@ bool DmmController::hasAcceptableStageInput(QString &message) {
 
 void DmmController::createDmms() {
     _dmms.resize(_stages.size());
+    _logs.resize(_stages.size());
+    const QString filename = "Stage %1 log.txt";
     for (int i = 0; i < _stages.size(); i++) {
         const StageSettings stage = _stages[i];
+        QString filename = "Stage %1 log.txt";
+        _logs[i].reset(new Log(dataDir.filePath(filename.arg(i+1)), APP_NAME, APP_VERSION));
+        _logs[i]->printHeader();
         _dmms[i].reset(new Dmm(stage.connectionType, stage.address, stage.driverPath));
+        _dmms[i]->useLog(_logs[i].data());
+        _dmms[i]->printInfo();
     }
 }
 
@@ -140,12 +156,20 @@ void DmmController::clear() {
     _inputPort   = 0;
     _stages.clear();
     _dmms.clear();
+    _logs.clear();
 }
 
 StageResult DmmController::readStage(uint i) const {
     const uint dmmPoints = _sweepPoints * _measuredPorts.size();
     Dmm &dmm = *_dmms[i];
-    return StageResult(parse(dmm.readData(dmmPoints)), _stages[i]);
+    QRowVector result = dmm.readData(dmmPoints);
+    if (result.size() != dmmPoints) {
+        qDebug() << "stage " << i << " result.size: " << result.size();
+        return StageResult(QRowVector(), _stages[i]);
+    }
+    else {
+        return StageResult(parse(dmm.readData(dmmPoints)), _stages[i]);
+    }
 }
 QRowVector DmmController::parse(const QRowVector &rawData) const {
     const uint numPorts   = _measuredPorts.size();

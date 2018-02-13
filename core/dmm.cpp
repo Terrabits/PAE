@@ -10,24 +10,28 @@ using namespace RsaToolbox;
 
 
 Dmm::Dmm(QObject *parent) :
-    GenericInstrument(parent)
+    GenericInstrument(parent),
+    _points(0)
 {
 
 }
 Dmm::Dmm(GenericBus *bus, QObject *parent) :
-    GenericInstrument(bus, parent)
+    GenericInstrument(bus, parent),
+    _points(0)
 {
 
 }
 Dmm::Dmm(ConnectionType type, QString address, QObject *parent) :
-    GenericInstrument(type, address, parent)
+    GenericInstrument(type, address, parent),
+    _points(0)
 {
 
 }
 
 Dmm::Dmm(ConnectionType type, QString address, const DmmDriver &driver, QObject *parent) :
     GenericInstrument(type, address, parent),
-    _driver(driver)
+    _driver(driver),
+    _points(0)
 {
 
 }
@@ -49,6 +53,7 @@ void Dmm::setup(uint points) {
     _points = points;
     sendSetupScpi();
     sendPointsScpi(points);
+    pause();
 }
 void Dmm::start() {
     sendStartScpi();

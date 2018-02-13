@@ -34,8 +34,8 @@ void DmmControllerTest::test() {
     StageSettings stage;
     stage.powerSupply_V = 5.0;
     stage.shuntResistor_ohms = 1.0e-3;
-    stage.connectionType = ConnectionType::VisaTcpConnection;
-    stage.address        = "127.0.0.1";
+    stage.connectionType = ConnectionType::VisaGpibConnection;
+    stage.address        = "16";
     stage.driverPath = driverPath;
 
     const uint numStages = 3;
