@@ -1,4 +1,5 @@
 {
+  "driver version": "1.0",
   "setup scpi": [
     "SENS:VOLT:DC:RANG 100 mV",
     "SENS:VOLT:DC:NPLC 0.001",

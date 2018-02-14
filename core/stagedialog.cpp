@@ -44,7 +44,9 @@ StageDialog::StageDialog(Keys *keys, QWidget *parent) :
             this, SLOT(getDriver()));
 
     blockSignals(isBlocked);
-    _lastPath.setPath(QDir::homePath());
+    QDir appData(keys->path());
+    appData.cdUp();
+    _lastPath.setPath(appData.filePath("Drivers"));
     _lastPath.setKey(keys, "PAE_DRIVER_PATH");
 }
 
