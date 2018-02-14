@@ -3,7 +3,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
     <Product Id="*" Language="1033"
              Name="R&amp;S PAE"
-             Version="0.5"
+             Version="0.6"
              Manufacturer="Rohde &amp; Schwarz"
              UpgradeCode="4a82ecfd-0d1b-4d6b-b639-8aeb5c3f6614">
         <Package       InstallerVersion="200" Compressed="yes" InstallScope="perMachine"              />
@@ -46,6 +46,8 @@
             <ComponentRef Id="Executable"      />
             <!-- Program Data   -->
             <ComponentRef Id="SettingsFolder"  />
+            <ComponentRef Id="Ag34410aDriver"  />
+            <ComponentRef Id="Ks34465aDriver"  />
             <!-- External tools -->
             <ComponentRef Id="ZnbShortcut"     />
             <ComponentRef Id="ZvaShortcut"     />
@@ -64,20 +66,21 @@
         <Directory Id="ZvaExternalTools" />
         <Directory Id="WINDOWSVOLUME">
             <Directory Id="ProgramFilesFolder">
-                <Directory Id="CompanyFilesFolder"  Name="Rohde-Schwarz">
-                    <Directory Id="INSTALLFOLDER"   Name="PAE">
-                        <Directory Id="Platforms"   Name="Platforms" />
-                        <Directory Id="Licenses"    Name="Licenses"  />
+                <Directory Id="CompanyFilesFolder"    Name="Rohde-Schwarz">
+                    <Directory Id="INSTALLFOLDER"     Name="PAE">
+                        <Directory Id="Platforms"     Name="Platforms" />
+                        <Directory Id="Licenses"      Name="Licenses"  />
                     </Directory>
                 </Directory>
             </Directory>
             <Directory Id="StartMenuFolder">
-                <Directory Id="StartFolder"         Name="R&amp;S PAE" />
+                <Directory Id="StartFolder"           Name="R&amp;S PAE" />
             </Directory>
             <Directory Id="CommonAppDataFolder">
-                <Directory Id="CompanyDataFolder"   Name="Rohde-Schwarz">
-                    <Directory Id="MyAppDataFolder" Name="PAE">
-                        <Directory Id="Settings"    Name="Settings" />
+                <Directory Id="CompanyDataFolder"     Name="Rohde-Schwarz">
+                    <Directory Id="MyAppDataFolder"   Name="PAE">
+                        <Directory Id="Settings"      Name="Settings" />
+                        <Directory Id="DriversFolder" Name="Drivers"  />
                     </Directory>
                 </Directory>
             </Directory>
@@ -166,6 +169,12 @@
             <RemoveFile   Id="RemoveLogs" Name="*.*" On="uninstall" />
             <RemoveFolder Id="RemoveSettingsFolder" Directory="Settings" On="uninstall" />
             <RemoveFolder Id="RemoveMyAppDataFolder" On="uninstall" />
+        </Component>
+        <Component Id="Ag34410aDriver" Guid="*" Directory="DriversFolder">
+          <File Name="Agilent 34410A.json" Source="../app/drivers/Agilent 34410A.json" KeyPath="yes" />
+        </Component>
+        <Component Id="Ks34465aDriver" Guid="*" Directory="DriversFolder">
+          <File Name="Keysight 34465A.json" Source="../app/drivers/Keysight 34465A.json" KeyPath="yes" />
         </Component>
         <!-- External Tools -->
         <Component Id="ZnbShortcut" Guid="*" Directory="ZnbExternalTools">

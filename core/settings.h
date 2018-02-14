@@ -10,7 +10,7 @@
 
 // Application settings
 const QString APP_NAME = "R&S PAE";
-const QString APP_VERSION = "0.5";
+const QString APP_VERSION = "0.6";
 const QString MANUFACTURER_FOLDER = "Rohde-Schwarz";
 const QString APP_FOLDER = "PAE";
 const QString APP_DESCRIPTION = "Measure Power Added Efficiency/Drain Efficiency of a power amplifier";
@@ -19,8 +19,8 @@ const QString CONTACT_INFO = "<html><head/><body><p>Nick Lalic<br/>VNA Software 
 // Connection settings
 const unsigned int TIMEOUT_MS = 1000;
 #ifdef DEBUG_MODE
-    const RsaToolbox::ConnectionType CONNECTION_TYPE     = RsaToolbox::ConnectionType::VisaGpibConnection;
-    const QString                    INSTRUMENT_ADDRESS  = "20";
+    const RsaToolbox::ConnectionType CONNECTION_TYPE     = RsaToolbox::ConnectionType::VisaTcpSocketConnection;
+    const QString                    INSTRUMENT_ADDRESS  = "127.0.0.1::5025";
 
     const QDir dataDir(SOURCE_DIR);
     const QString LOG_FILENAME = dataDir.filePath("DEBUG_LOGFILE.txt");

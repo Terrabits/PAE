@@ -99,11 +99,9 @@ void MainWindow::loadKeys() {
         return;
     }
 
-    qDebug() << "key path: " << _keys->path();
     if (_keys->exists("PAE_CALC")) {
         quint32 calc;
         _keys->get("PAE_CALC", calc);
-        qDebug() << "calc: " << calc;
         setCalculation(TracesWidget::Calculation(calc));
     }
     ui->traces->loadKeys();
@@ -114,12 +112,9 @@ void MainWindow::saveKeys() {
         return;
     }
 
-    qDebug() << "Saving keys";
-    qDebug() << "calc: " << quint32(calculation());
     _keys->set("PAE_CALC", quint32(calculation()));
     ui->traces->saveKeys();
     ui->stageList->saveKeys();
-    qDebug() << "Keys saved";
 }
 
 void MainWindow::init() {

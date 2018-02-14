@@ -1,8 +1,8 @@
 {
+  "driver version": "1.0.0",
   "setup scpi": [
     "*RST",
     "*CLS",
-    "SYST:BEEP:STAT OFF",
     "SENS:VOLT:DC:NPLC 0.006",
     "TRIG:SOUR EXT",
     "TRIG:DEL 10us",
@@ -14,7 +14,8 @@
   ],
   "set points scpi":        "TRIG:COUN %1",
   "start scpi":             "INIT",
-  "sleep after start scpi": 1,
+  "sleep after start scpi": 10e-3,
+  "data format":            "ASCII",
   "query data scpi":        "FETC?",
   "measurement type":       "voltage"
 }
