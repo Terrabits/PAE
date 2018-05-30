@@ -40,6 +40,7 @@ public:
     void setStages(const QVector<StageSettings> &stages);
 
     void setSweepPoints(uint points);
+    void setTriggerDelay(double delay_s);
     void setPorts(const QVector<uint> &measuredPorts, uint inputPort);
 
     void setup();
@@ -49,7 +50,8 @@ public:
     DmmController &operator=(const DmmController &other);
 
 private:
-    uint _sweepPoints;
+    uint   _sweepPoints;
+    double _triggerDelay_s;
     QVector<uint> _measuredPorts;
     uint          _inputPort;
     QVector<StageSettings> _stages;

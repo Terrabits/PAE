@@ -17,5 +17,5 @@
   "sleep after start scpi": 100e-3,
   "data format":            "ascii",
   "query data scpi":        "FETC?",
-  "measurement type":       "voltage"
+  "measurement type":       "e"
 }

@@ -1,16 +1,7 @@
 {
   "driver version": "2.0.0",
   "preset": true,
-  "setup scpi": [
-    "SENS:VOLT:DC:RANG 100 mV",
-    "SENS:VOLT:DC:NPLC 0.001",
-    "TRIG:SOUR EXT",
-    "TRIG:SLOP POS",
-    "SAMP:SOUR IMM",
-    "SAMP:COUN 1",
-    "FORM:DATA ASC",
-    "FORM:BORD NORM"
-  ],
+  "setup scpi": -1,
   "set points scpi":        "TRIG:COUN %1",
   "set trigger delay scpi": "TRIG:DEL  %1",
   "start scpi":             "INIT",

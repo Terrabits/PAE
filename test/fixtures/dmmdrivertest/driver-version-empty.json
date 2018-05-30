@@ -1,5 +1,5 @@
 {
-  "driver version": "2.0.0",
+  "driver version": "",
   "preset": true,
   "setup scpi": [
     "SENS:VOLT:DC:RANG 100 mV",
@@ -15,7 +15,7 @@
   "set trigger delay scpi": "TRIG:DEL  %1",
   "start scpi":             "INIT",
   "sleep after start scpi": 100e-3,
-  "data format":            "ascii",
+  "data format":            "ASCII",
   "query data scpi":        "FETC?",
   "measurement type":       "voltage"
 }

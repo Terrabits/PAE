@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from   rohdeschwarz.instruments.vna               import Vna
 from   rohdeschwarz.instruments.genericinstrument import GenericInstrument
 from   keysight    import   Dmm
@@ -12,13 +13,13 @@ from   time        import   perf_counter
 v_dc    = 50
 r_ohms  = 5e-3
 v_range = "100 mV" # 1 mV too low for dmm?
-nplc    = 0.001    # 20 us capture time 
+nplc    = 0.001    # 20 us capture time
 delay_s = 20e-6
 #
 
 vna = Vna()
 # vna.open_tcp('192.168.35.6')
-vna.open('gpib', 10)
+vna.open('gpib', 20)
 vna.timeout_ms = 60*1e3 # 1 min
 ch1            = vna.channel(1)
 trc            = vna.trace('Trc2')

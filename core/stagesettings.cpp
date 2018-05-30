@@ -136,9 +136,12 @@ bool StageSettings::hasAcceptableDriverPath(QString &message) const {
         return false;
     }
     DmmDriver driver(driverPath);
-    if (!driver.isOpen()) {
-        message = "*could not read \'%1\': is driver valid?";
+    // TODO: replace with driver.isValid(msg)
+    QString error;
+    if (!driver.isValid(error)) {
+        message = "*\'%1\': %2?";
         message = message.arg(driverFilename());
+        message = message.arg(error);
         return false;
     }
     return true;

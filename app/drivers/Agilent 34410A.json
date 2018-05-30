@@ -1,11 +1,9 @@
 {
-  "driver version": "1.0.0",
+  "driver version": "2.0.0",
+  "preset": true,
   "setup scpi": [
-    "*RST",
-    "*CLS",
     "SENS:VOLT:DC:NPLC 0.006",
     "TRIG:SOUR EXT",
-    "TRIG:DEL 10us",
     "TRIG:SLOP POS",
     "SAMP:SOUR IMM",
     "SAMP:COUN 1",
@@ -13,9 +11,10 @@
     "FORM:BORD NORM"
   ],
   "set points scpi":        "TRIG:COUN %1",
+  "set trigger delay scpi": "TRIG:DEL  %1",
   "start scpi":             "INIT",
-  "sleep after start scpi": 10e-3,
-  "data format":            "ASCII",
+  "sleep after start":      10e-3,
+  "data format":            "ascii",
   "query data scpi":        "FETC?",
   "measurement type":       "voltage"
 }

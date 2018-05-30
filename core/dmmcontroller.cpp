@@ -8,6 +8,7 @@ using namespace RsaToolbox;
 
 // Qt
 #include <QDebug>
+#include <QFileInfo>
 
 // stdlib
 #include <cassert>
@@ -29,6 +30,15 @@ DmmController::~DmmController()
 void DmmController::setSweepPoints(uint points) {
     _sweepPoints = points;
 }
+void DmmController::setTriggerDelay(double delay_s) {
+    if (delay_s < 0) {
+        _triggerDelay_s = 0;
+    }
+    else {
+        _triggerDelay_s = delay_s;
+    }
+}
+
 void DmmController::setPorts(const QVector<uint> &measuredPorts, uint inputPort) {
     _measuredPorts = measuredPorts;
     _inputPort = inputPort;
@@ -47,7 +57,7 @@ void DmmController::setStages(const QVector<StageSettings> &stages) {
 void DmmController::setup() {
     for (int i = 0; i < _stages.size(); i++) {
         Dmm &dmm = *_dmms[i];
-        dmm.setup(_sweepPoints * _measuredPorts.size());
+        dmm.setup(_sweepPoints * _measuredPorts.size(), _triggerDelay_s);
     }
 }
 
@@ -56,7 +66,7 @@ void DmmController::start() {
     uint _maxSleep = 0;
     for (int i = 0; i < _dmms.size(); i++) {
         QSharedPointer<Dmm> dmm = _dmms[i];
-        dmm->start();
+        dmm->start(false);
         if (dmm->driver().sleepAfterStart_s > _maxSleep) {
             _maxSleepDmm = dmm;
         }
@@ -125,10 +135,13 @@ bool DmmController::hasAcceptableStageInput(QString &message) {
         }
 
         Dmm &dmm = *_dmms[i];
-        if (!dmm.hasValidDriver()) {
-            const QString filename = dmm.driver().filename();
-            message = "*cannot parse \"%1\"";
+        QString driverMsg;
+        if (!dmm.hasValidDriver(driverMsg)) {
+            QString filename = dmm.driver().filename();
+            filename = QFileInfo(filename).fileName();
+            message = "*driver \"%1\": %2";
             message = message.arg(filename);
+            message = message.arg(driverMsg);
             return false;
         }
     }
@@ -151,12 +164,13 @@ void DmmController::createDmms() {
 }
 
 void DmmController::clear() {
-    _sweepPoints = 0;
-    _measuredPorts.clear();
-    _inputPort   = 0;
-    _stages.clear();
-    _dmms.clear();
-    _logs.clear();
+    _sweepPoints    = 0;
+    _triggerDelay_s = 0;
+    _measuredPorts   .clear();
+    _inputPort      = 0;
+    _stages          .clear();
+    _dmms            .clear();
+    _logs            .clear();
 }
 
 StageResult DmmController::readStage(uint i) const {
@@ -164,11 +178,10 @@ StageResult DmmController::readStage(uint i) const {
     Dmm &dmm = *_dmms[i];
     QRowVector result = dmm.readData(dmmPoints);
     if (result.size() != dmmPoints) {
-        qDebug() << "stage " << i << " result.size: " << result.size();
-        return StageResult(QRowVector(), _stages[i]);
+         return StageResult(QRowVector(), _stages[i]);
     }
     else {
-        return StageResult(parse(dmm.readData(dmmPoints)), _stages[i]);
+        return StageResult(parse(result), _stages[i]);
     }
 }
 QRowVector DmmController::parse(const QRowVector &rawData) const {

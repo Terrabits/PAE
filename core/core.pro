@@ -21,7 +21,8 @@ HEADERS     += settings.h \
                measurepae.h \
                traceswidget.h \
     processtrace.h \
-    tracesettings.h
+    tracesettings.h \
+    pulsegenwidget.h
 SOURCES     += dmmdriver.cpp \
                dmm.cpp \
                stagesettings.cpp \
@@ -33,10 +34,12 @@ SOURCES     += dmmdriver.cpp \
                measurepae.cpp \
                traceswidget.cpp \
     processtrace.cpp \
-    tracesettings.cpp
+    tracesettings.cpp \
+    pulsegenwidget.cpp
 FORMS +=       stagelistwidget.ui \
                stagedialog.ui \
-               traceswidget.ui
+               traceswidget.ui \
+    pulsegenwidget.ui
 RESOURCES +=   core.qrc
 
 DEFINES     += SOURCE_DIR=\\\"$$PWD/\\\"

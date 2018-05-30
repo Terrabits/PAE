@@ -54,11 +54,14 @@ void DmmControllerTest::test() {
     }
     const QString readString = toString(read, ",");
     QVariantList readList;
+    readList << QString("1");
+    readList << QString("1");
     readList << QVariant(readString);
 
     DmmController controller;
     controller.setStages(stages);
     controller.setSweepPoints(points);
+    controller.setTriggerDelay(1e-3);
     controller.setPorts(ports, sourcePort);
 
     for (int i = 0; i < controller._dmms.size(); i++) {

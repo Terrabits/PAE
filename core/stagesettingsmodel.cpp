@@ -111,8 +111,9 @@ QModelIndex StageSettingsModel::parent(const QModelIndex &child) const {
 }
 
 bool StageSettingsModel::insertRows(int row, int count, const QModelIndex &parent) {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return false;
+    }
 
     beginInsertRows(parent, row, row + count - 1);
     _settings.insert(row, count, StageSettings());

@@ -6,6 +6,9 @@
 #include "dmmcontroller.h"
 #include "stagedialog.h"
 
+// RsaToolbox
+using namespace RsaToolbox;
+
 // Qt
 #include <QApplication>
 #include <QDebug>
@@ -14,12 +17,17 @@
 
 StageListWidget::StageListWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::StageListWidget),
+    ui(new ::Ui::StageListWidget),
     _keys(0)
 {
     ui->setupUi(this);
 
     bool isBlocked = blockSignals(true);
+
+    ui->delay->setValue(0);
+    ui->delay->setMinimum(0);
+    ui->delay->interpretMKeyAsMilli();
+    ui->delay->setUnits(Units::Seconds);
 
     _model.reset(new StageSettingsModel);
     ui->stages->setModel(_model.data());
@@ -50,12 +58,22 @@ bool StageListWidget::hasAcceptableInput(QString &message) const {
     return controller.hasAcceptableStageInput(message);
 }
 
+double StageListWidget::delay_s() const {
+    return ui->delay->value();
+}
+void StageListWidget::setDelay(double value, SiPrefix prefix) {
+    ui->delay->setValue(value, prefix);
+}
+
 void StageListWidget::addStage(int row) {
     if (!_model) {
         return;
     }
 
     _model->insertRow(row);
+    const QModelIndex i = _model->index(row, 0);
+    ui->stages->selectRow(row);
+    ui->stages->setCurrentIndex(i);
 }
 
 QVector<StageSettings> StageListWidget::stages() const {
@@ -66,13 +84,23 @@ bool StageListWidget::isKeys() const {
     return _keys != 0;
 }
 void StageListWidget::loadKeys() {
-    if (!isKeys())
+    if (!isKeys()) {
         return;
+    }
 
     QVector<StageSettings> settings;
     if (_keys->exists("PAE_STAGES")) {
         _keys->get("PAE_STAGES", settings);
         _model->setSettings(settings);
+
+        const int   lastRow = settings.size() - 1;
+        const QModelIndex i = _model->index(lastRow, 0);
+        ui->stages->setCurrentIndex(i);
+    }
+    if (_keys->exists("DMM_DELAY")) {
+        double value;
+        _keys->get("DMM_DELAY", value);
+        ui->delay->setValue(value);
     }
 }
 void StageListWidget::saveKeys() const {

@@ -34,6 +34,9 @@ public:
     bool hasAcceptableInput() const;
     bool hasAcceptableInput(QString &message) const;
 
+    double delay_s() const;
+    void setDelay(double value, RsaToolbox::SiPrefix prefix = RsaToolbox::SiPrefix::None);
+
     void addStage(int index = 0);
     QVector<StageSettings> stages() const;
 

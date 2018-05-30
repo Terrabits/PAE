@@ -29,18 +29,25 @@ void DmmTest::test() {
     // Driver
     DmmDriver driver(_fixtures.filePath("example_driver.json"));
     const uint points = 101;
+    const double triggerDelay_s = 1e-3;
 
     // Reads
     QRowVector data(points);
     QVariantList reads;
+    reads << QString("1");
+    reads << QString("1");
     reads << toString(data, ",");
 
     // Writes
     QVariantList setupWrites;
+    setupWrites << QString("*RST\n");
+    setupWrites << QString("*OPC?\n");
     for (int i = 0; i < driver.setupScpi.size(); i++) {
         setupWrites << QVariant(driver.setupScpi[i]);
     }
     setupWrites << driver.setPointsScpi.arg(points);
+    setupWrites << driver.setTriggerDelayScpi.arg(triggerDelay_s);
+    setupWrites << QString("*OPC?\n");
 
     QVariantList startWrites;
     startWrites << QVariant(driver.startScpi);
@@ -58,7 +65,7 @@ void DmmTest::test() {
     dmm.setDriver(driver);
 
     // Start testing
-    dmm.setup(101);
+    dmm.setup(points, triggerDelay_s);
     QVERIFY(bus->isReadsLeft());
     QCOMPARE(bus->writes(), setupWrites);
 

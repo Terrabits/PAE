@@ -19,6 +19,9 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    qDebug() << qFuzzyCompare(QString("0.10000000000000001").toDouble(), double(100e-3));
+    return 0;
+
     Log log(dataDir.filePath("log.txt"), "Test", "0.0");
     log.printHeader();
 

@@ -24,7 +24,7 @@ int main() {
     testRunner.addTest(new DmmDriverTest);
     testRunner.addTest(new DmmTest);
     testRunner.addTest(new DmmControllerTest);
-    testRunner.addTest(new MeasurePaeTest(CONNECTION_TYPE, INSTRUMENT_ADDRESS));
+//    testRunner.addTest(new MeasurePaeTest(CONNECTION_TYPE, INSTRUMENT_ADDRESS));
 
     qDebug() << "Global result: " << (testRunner.runTests() ? "PASS" : "FAIL");
     return 0;

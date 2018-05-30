@@ -13,9 +13,9 @@
   ],
   "set points scpi":        "TRIG:COUN %1",
   "set trigger delay scpi": "TRIG:DEL  %1",
-  "start scpi":             "INIT",
+  "start scpi":             "",
   "sleep after start scpi": 100e-3,
-  "data format":            "ascii",
+  "data format":            "ASCII",
   "query data scpi":        "FETC?",
   "measurement type":       "voltage"
 }

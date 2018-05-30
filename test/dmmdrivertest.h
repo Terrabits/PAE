@@ -19,12 +19,16 @@ private slots:
     virtual void initTestCase();
     virtual void cleanupTestCase();
 
-    void open();
-    void save();
+    void openTest();
+    void saveTest();
+
+    void isValidTest_data();
+    void isValidTest();
 
 private:
     QDir _src;
     QDir _fixtures;
+    QDir _dmmdrivertestFixtures;
     QDir _temp;
 };
 
